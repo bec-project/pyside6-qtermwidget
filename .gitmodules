@@ -1,0 +1,6 @@
+[submodule "external/lxqt-build-tools"]
+	path = external/lxqt-build-tools
+	url = https://github.com/lxqt/lxqt-build-tools.git
+[submodule "external/qtermwidget"]
+	path = external/qtermwidget
+	url = https://github.com/lxqt/qtermwidget.git
