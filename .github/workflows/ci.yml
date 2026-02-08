@@ -18,13 +18,6 @@ jobs:
           path: pyside6-qtermwidget
           submodules: recursive
 
-      - name: Checkout qtermwidget
-        uses: actions/checkout@v4
-        with:
-          repository: lxqt/qtermwidget
-          ref: master
-          path: qtermwidget
-
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
