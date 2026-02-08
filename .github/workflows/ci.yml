@@ -49,7 +49,7 @@ jobs:
             Qt6_DIR=${{ github.workspace }}/Qt/${{ matrix.version }}/gcc_64
             QT6_INSTALL_DIR=${{ github.workspace }}/Qt/${{ matrix.version }}/gcc_64
 
-          CIBW_BEFORE_ALL_LINUX: |
+          CIBW_BEFORE_BUILD_LINUX: |
             python -m pip install --upgrade pip
             python -m pip install aqtinstall
             python -m pip install PySide6==${{ matrix.version }} shiboken6==${{ matrix.version }} shiboken6_generator==${{ matrix.version }}
@@ -66,7 +66,7 @@ jobs:
             CC=/opt/homebrew/opt/llvm/bin/clang
             CXX=/opt/homebrew/opt/llvm/bin/clang++
 
-          CIBW_BEFORE_ALL_MACOS: >
+          CIBW_BEFORE_BUILD_MACOS: |
             python -m pip install --upgrade pip
             python -m pip install aqtinstall
             python -m pip install PySide6==${{ matrix.version }} shiboken6==${{ matrix.version }} shiboken6-generator==${{ matrix.version }}
