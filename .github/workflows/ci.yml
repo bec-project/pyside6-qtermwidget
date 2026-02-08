@@ -148,6 +148,7 @@ jobs:
         run: |
           ls -l 
           export Qt6_DIR=${{ env.QT6_DIR }}
+          export QT6_INSTALL_DIR=${{ env.QT6_DIR }}
           export QTERMWIDGET_DIR=$PWD/qtermwidget/build/install
 
           cd pyside6-qtermwidget
