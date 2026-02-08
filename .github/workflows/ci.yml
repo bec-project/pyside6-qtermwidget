@@ -8,8 +8,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest]
-        version: ["6.9.0"]
+        include:
+          - os: macos-latest
+            version: 3.9.0
+            wheel: cp39-macosx_arm64
+            arch: arm64
 
     steps:
       - name: Checkout pyside6-qtermwidget
@@ -40,7 +43,7 @@ jobs:
           output-dir: ./wheelhouse
           config-file: ./pyside6-qtermwidget/pyproject.toml
         env:
-          CIBW_BUILD: cp313-*
+          CIBW_BUILD: ${{ matrix.wheel }}
           CIBW_SKIP: "*musllinux*"
           CIBW_BUILD_VERBOSITY: 1
 
