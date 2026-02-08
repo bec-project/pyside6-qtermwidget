@@ -48,8 +48,6 @@ jobs:
           CIBW_ENVIRONMENT_LINUX: >
             Qt6_DIR=${{ github.workspace }}/Qt/${{ matrix.version }}/gcc_64
             QT6_INSTALL_DIR=${{ github.workspace }}/Qt/${{ matrix.version }}/gcc_64
-            C_INCLUDE_PATH=/usr/include:/opt/rh/gcc-toolset-14/root/usr/include
-            CPLUS_INCLUDE_PATH=/usr/include/c++/11:/usr/include/c++/14:/opt/rh/gcc-toolset-14/root/usr/include/c++/14
 
           CIBW_BEFORE_BUILD_LINUX: |
             python -m pip install --upgrade pip
