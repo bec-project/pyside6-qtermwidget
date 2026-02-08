@@ -9,7 +9,7 @@ jobs:
       matrix:
         python: [3.13]
         pyside6: [6.9.0]
-        os: [macos-latest]
+        os: [ubuntu-latest]
 
     steps:
       - name: Checkout pyside6-qtermwidget
