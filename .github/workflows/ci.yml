@@ -52,6 +52,7 @@ jobs:
           CIBW_BEFORE_ALL_LINUX: |
             python -m pip install --upgrade pip
             python -m pip install aqtinstall
+            python -m pip install PySide6==${{ matrix.version }} shiboken6==${{ matrix.version }} shiboken6-generator==${{ matrix.version }}
             python -m aqt install-qt linux desktop ${{ matrix.version }} --outputdir ${{ github.workspace }}/Qt
             yum install -y mesa-libGL libxslt llvm clang clang-devel libxkbcommon-devel cmake
 
@@ -68,6 +69,7 @@ jobs:
           CIBW_BEFORE_ALL_MACOS: >
             python -m pip install --upgrade pip
             python -m pip install aqtinstall
+            python -m pip install PySide6==${{ matrix.version }} shiboken6==${{ matrix.version }} shiboken6-generator==${{ matrix.version }}
             python -m aqt install-qt mac desktop ${{ matrix.version }} --outputdir ${{ github.workspace }}/Qt
             brew install cmake llvm
 
