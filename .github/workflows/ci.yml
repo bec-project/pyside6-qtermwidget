@@ -47,15 +47,29 @@ jobs:
 
           # ---------- Qt + system deps ----------
           CIBW_BEFORE_ALL_LINUX: |
+            # Install Python packages
+            python -m pip install --upgrade pip
             python -m pip install aqtinstall
+
+            # Install Qt
             python -m aqt install-qt linux desktop ${QT_VERSION} --outputdir ${QT_BASE_DIR}
-            sudo apt-get update
-            sudo apt-get install -y \
-              cmake libgl1-mesa-dev \
-              libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 \
-              libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 \
-              libxcb-xinerama0 libxcb-xfixes0 \
-              clang llvm libclang-dev
+
+            # Install system dependencies
+            yum install -y \
+              cmake \
+              mesa-libGL-devel \
+              libxkbcommon-x11-devel \
+              libxcb-devel \
+              libxcb-icccm-devel \
+              libxcb-image-devel \
+              libxcb-keysyms-devel \
+              libxcb-randr-devel \
+              libxcb-render-util-devel \
+              libxcb-xinerama-devel \
+              libxcb-xfixes-devel \
+              clang \
+              llvm \
+              libclang-devel
 
           CIBW_BEFORE_ALL_MACOS: |
             python -m pip install aqtinstall
