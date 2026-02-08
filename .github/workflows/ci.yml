@@ -8,7 +8,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest]
+        os: [ubuntu-latest]
         version: ["6.9.0"]
 
     steps:
@@ -40,7 +40,7 @@ jobs:
           output-dir: ./wheelhouse
           config-file: ./pyside6-qtermwidget/pyproject.toml
         env:
-          CIBW_BUILD: cp3{11,12,13}-* # Build for Python 3.11, 3.12, and 3.13
+          CIBW_BUILD: cp312-* #cp3{11,12,13}-* # Build for Python 3.11, 3.12, and 3.13
           CIBW_SKIP: "*musllinux*"
           CIBW_BUILD_VERBOSITY: 1
 
