@@ -6,7 +6,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 include(ExternalProject)
 
-find_package(Python3 COMPONENTS Interpreter REQUIRED) # for macos: Development.Module Development.Embed
+find_package(Python3 COMPONENTS Interpreter Development.Module REQUIRED) # for macos:  Development.Embed
 
 # Qt6 installation directory (pass via -DQT6_INSTALL_DIR=... or set QT6_INSTALL_DIR environment variable)
 set(QT6_INSTALL_DIR "" CACHE PATH "Qt6 installation directory")
