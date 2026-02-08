@@ -114,67 +114,11 @@ jobs:
           cmake --build .
           cmake --install .
 
-      - name: Generate Python bindings with Shiboken6
-        run: |
-          export PATH=${{ env.QT6_DIR }}/bin:$PATH
-          export CLANG_INSTALL_DIR=/usr
-
-          PYSIDE_TYPESYSTEM=$(python -c "from pathlib import Path; import PySide6; print(Path(PySide6.__file__).parent / 'typesystems')")
-
-          QTERMWIDGET_INSTALL=$PWD/qtermwidget/build/install
-          INCLUDE_PATHS="${QTERMWIDGET_INSTALL}/include:${QTERMWIDGET_INSTALL}/include/qtermwidget6"
-          INCLUDE_PATHS="${INCLUDE_PATHS}:${{ env.QT6_DIR }}/include"
-          INCLUDE_PATHS="${INCLUDE_PATHS}:${{ env.QT6_DIR }}/include/QtCore"
-          INCLUDE_PATHS="${INCLUDE_PATHS}:${{ env.QT6_DIR }}/include/QtGui"
-          INCLUDE_PATHS="${INCLUDE_PATHS}:${{ env.QT6_DIR }}/include/QtWidgets"
-
-          # On macOS, we also need to include framework headers
-          if [[ "$RUNNER_OS" == "macOS" ]]; then
-            INCLUDE_PATHS="${INCLUDE_PATHS}:${{ env.QT6_DIR }}/lib"
-            INCLUDE_PATHS="${INCLUDE_PATHS}:${{ env.QT6_DIR }}/lib/QtCore.framework/Headers"
-            INCLUDE_PATHS="${INCLUDE_PATHS}:${{ env.QT6_DIR }}/lib/QtGui.framework/Headers"
-            INCLUDE_PATHS="${INCLUDE_PATHS}:${{ env.QT6_DIR }}/lib/QtWidgets.framework/Headers"
-          fi
-
-          cd pyside6-qtermwidget/src
-          mkdir -p ../../build_bindings
-
-          SHIBOKEN_FLAGS=(
-            --generator-set=shiboken
-            --enable-parent-ctor-heuristic
-            --enable-pyside-extensions
-            --enable-return-value-heuristic
-            --use-isnull-as-nb_nonzero
-            --avoid-protected-hack
-          )
-
-          if [[ "$RUNNER_OS" == "macOS" ]]; then
-            SHIBOKEN_FLAGS+=(
-              --framework-include-paths=${{ env.QT6_DIR }}/lib
-            )
-          fi
-
-          shiboken6 \
-              "${SHIBOKEN_FLAGS[@]}" \
-              --output-directory=../build_bindings \
-              --include-paths=${INCLUDE_PATHS} \
-              --typesystem-paths=${PYSIDE_TYPESYSTEM} \
-              qtermwidget_bindings.h \
-              typesystem_qtermwidget.xml
-
-      - name: Upload the qtermwidget library as an artifact
-        uses: actions/upload-artifact@v5
-        with:
-          name: qtermwidget-build
-          path: |
-            pyside6-qtermwidget/build_bindings/qtermwidget
-            qtermwidget/build/install
-
       - name: Build Python extension
         run: |
           ls -l ${GITHUB_WORKSPACE}
           mkdir -p build_ext && cd build_ext
-          cmake ${GITHUB_WORKSPACE}/pyside6-qtermwidget -DCMAKE_PREFIX_PATH=${{ env.QT6_DIR }}
+          cmake ${GITHUB_WORKSPACE}/pyside6-qtermwidget -DQT6_INSTALL_DIR=${{ env.QT6_DIR }}
           cmake --build .
           cp _qtermwidget.so ../qtermwidget/
 

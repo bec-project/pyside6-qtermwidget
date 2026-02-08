@@ -5,6 +5,15 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
+
+# Qt6 installation directory (pass via -DQT6_INSTALL_DIR=...)
+set(QT6_INSTALL_DIR "" CACHE PATH "Qt6 installation directory")
+if(NOT QT6_INSTALL_DIR)
+    message(FATAL_ERROR "QT6_INSTALL_DIR must be set to the Qt6 installation directory")
+endif()
+
+# Add Qt6 to CMAKE_PREFIX_PATH so find_package can locate it
+list(APPEND CMAKE_PREFIX_PATH "${QT6_INSTALL_DIR}")
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
 
 # Set paths for external libraries
@@ -55,10 +64,89 @@ execute_process(
 )
 message(STATUS "Contents of qtermwidget include directory:\n${QTERMWIDGET_INCLUDE_CONTENTS}")
 
+# Get PySide6 typesystem path
+execute_process(
+    COMMAND python3 -c "from pathlib import Path; import PySide6; print(Path(PySide6.__file__).parent / 'typesystems')"
+    OUTPUT_VARIABLE PYSIDE_TYPESYSTEM
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+# Find shiboken6 executable
+execute_process(
+    COMMAND python3 -c "from pathlib import Path; import shiboken6_generator; print(Path(shiboken6_generator.__file__).parent / 'shiboken6')"
+    OUTPUT_VARIABLE SHIBOKEN6_EXECUTABLE
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+message(STATUS "PySide typesystem: ${PYSIDE_TYPESYSTEM}")
+message(STATUS "Shiboken6 executable: ${SHIBOKEN6_EXECUTABLE}")
+
+# Build include paths for shiboken6
+set(SHIBOKEN_INCLUDE_PATHS
+    "${QTERMWIDGET_DIR}/include"
+    "${QTERMWIDGET_DIR}/include/qtermwidget6"
+    "${QT6_INSTALL_DIR}/include"
+    "${QT6_INSTALL_DIR}/include/QtCore"
+    "${QT6_INSTALL_DIR}/include/QtGui"
+    "${QT6_INSTALL_DIR}/include/QtWidgets"
+)
+
+# On macOS, add framework paths
+if(APPLE)
+    list(APPEND SHIBOKEN_INCLUDE_PATHS
+        "${QT6_INSTALL_DIR}/lib"
+        "${QT6_INSTALL_DIR}/lib/QtCore.framework/Headers"
+        "${QT6_INSTALL_DIR}/lib/QtGui.framework/Headers"
+        "${QT6_INSTALL_DIR}/lib/QtWidgets.framework/Headers"
+    )
+endif()
+
+# Convert list to colon-separated string
+string(REPLACE ";" ":" SHIBOKEN_INCLUDE_PATHS_STR "${SHIBOKEN_INCLUDE_PATHS}")
+
+# Shiboken flags
+set(SHIBOKEN_FLAGS
+    --generator-set=shiboken
+    --enable-parent-ctor-heuristic
+    --enable-pyside-extensions
+    --enable-return-value-heuristic
+    --use-isnull-as-nb_nonzero
+    --avoid-protected-hack
+)
+
+# Add framework-include-paths on macOS
+if(APPLE)
+    list(APPEND SHIBOKEN_FLAGS --framework-include-paths=${QT6_INSTALL_DIR}/lib)
+endif()
+
+# Output directory for generated bindings
+set(SHIBOKEN_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build_bindings")
+
+# Custom command to generate Python bindings with Shiboken6
+add_custom_command(
+    OUTPUT
+        ${SHIBOKEN_OUTPUT_DIR}/qtermwidget/qtermwidget_module_wrapper.cpp
+        ${SHIBOKEN_OUTPUT_DIR}/qtermwidget/qtermwidget_wrapper.cpp
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${SHIBOKEN_OUTPUT_DIR}
+    COMMAND ${SHIBOKEN6_EXECUTABLE}
+        ${SHIBOKEN_FLAGS}
+        --output-directory=${SHIBOKEN_OUTPUT_DIR}
+        --include-paths=${SHIBOKEN_INCLUDE_PATHS_STR}
+        --typesystem-paths=${PYSIDE_TYPESYSTEM}
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/qtermwidget_bindings.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/typesystem_qtermwidget.xml
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src
+    DEPENDS
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/qtermwidget_bindings.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/typesystem_qtermwidget.xml
+    COMMENT "Generating Python bindings with Shiboken6"
+    VERBATIM
+)
+
 # Shiboken-generated sources
 set(SHIBOKEN_SOURCES
-    build_bindings/qtermwidget/qtermwidget_module_wrapper.cpp
-    build_bindings/qtermwidget/qtermwidget_wrapper.cpp
+    ${SHIBOKEN_OUTPUT_DIR}/qtermwidget/qtermwidget_module_wrapper.cpp
+    ${SHIBOKEN_OUTPUT_DIR}/qtermwidget/qtermwidget_wrapper.cpp
 )
 
 # Build the Python extension 
@@ -73,11 +161,9 @@ target_include_directories(_qtermwidget PRIVATE
     ${PYSIDE_INCLUDE}/QtGui
     ${PYSIDE_INCLUDE}/QtWidgets
     ${PYTHON_INCLUDE}
-    ${CMAKE_CURRENT_SOURCE_DIR}/build_bindings/qtermwidget
+    ${SHIBOKEN_OUTPUT_DIR}/qtermwidget
     ${QTERMWIDGET_DIR}/include
     ${QTERMWIDGET_DIR}/include/qtermwidget6
-    # ${EXT_QTERMWIDGET_DIR}/lib
-    # ${EXT_LXQT_BUILD_TOOLS_DIR}/include
 )
 
 
