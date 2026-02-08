@@ -55,7 +55,7 @@ jobs:
             python -m pip install --upgrade pip
             python -m pip install aqtinstall
             python -m aqt install-qt linux desktop ${{ matrix.version }} --outputdir ${{ github.workspace }}/Qt
-            yum install -y mesa-libGL libxslt llvm clang clang-devel libxkbcommon-devel
+            yum install -y mesa-libGL libxslt libxkbcommon-devel
 
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_34
 
