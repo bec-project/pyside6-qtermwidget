@@ -33,6 +33,13 @@ set(QTERMWIDGET_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../qtermwidget")
 set(QTERMWIDGET_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/qtermwidget-build")
 set(QTERMWIDGET_DIR "${QTERMWIDGET_BUILD_DIR}/install")
 
+# Determine library extension based on platform
+if(APPLE)
+    set(QTERMWIDGET_LIB "${QTERMWIDGET_DIR}/lib/libqtermwidget6.dylib")
+else()
+    set(QTERMWIDGET_LIB "${QTERMWIDGET_DIR}/lib/libqtermwidget6.so")
+endif()
+
 # Build qtermwidget as an external project
 ExternalProject_Add(qtermwidget_external
     SOURCE_DIR ${QTERMWIDGET_SOURCE_DIR}
@@ -44,6 +51,7 @@ ExternalProject_Add(qtermwidget_external
         -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
     BUILD_COMMAND ${CMAKE_COMMAND} --build ${QTERMWIDGET_BUILD_DIR}
     INSTALL_COMMAND ${CMAKE_COMMAND} --install ${QTERMWIDGET_BUILD_DIR}
+    BUILD_BYPRODUCTS ${QTERMWIDGET_LIB}
 )
 
 # Shiboken
@@ -222,21 +230,35 @@ if (APPLE)
 
     message(STATUS "Using PySide dylib: ${PYSIDE_DYLIB_PATH}")
 
+    # Create imported target for qtermwidget library
+    add_library(qtermwidget6 SHARED IMPORTED)
+    set_target_properties(qtermwidget6 PROPERTIES
+        IMPORTED_LOCATION ${QTERMWIDGET_LIB}
+    )
+    add_dependencies(qtermwidget6 qtermwidget_external)
+
     target_link_libraries(_qtermwidget
         Qt6::Core
         Qt6::Gui
         Qt6::Widgets
-        ${QTERMWIDGET_DIR}/lib/libqtermwidget6.dylib
+        qtermwidget6
         Python3::Python
         ${SHIBOKEN_DYLIB_PATH}
         ${PYSIDE_DYLIB_PATH}
     )
 else ()
+    # Create imported target for qtermwidget library
+    add_library(qtermwidget6 SHARED IMPORTED)
+    set_target_properties(qtermwidget6 PROPERTIES
+        IMPORTED_LOCATION ${QTERMWIDGET_LIB}
+    )
+    add_dependencies(qtermwidget6 qtermwidget_external)
+
     target_link_libraries(_qtermwidget
         Qt6::Core
         Qt6::Gui
         Qt6::Widgets
-        ${QTERMWIDGET_DIR}/lib/libqtermwidget6.so
+        qtermwidget6
     )
 endif()
 
