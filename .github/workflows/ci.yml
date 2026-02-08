@@ -49,8 +49,8 @@ jobs:
 
           # Linux specific
           CIBW_ENVIRONMENT_LINUX: >
-            Qt6_DIR=${QT_BASE_DIR}/${QT_VERSION}/gcc_64
-            QT6_INSTALL_DIR=${QT_BASE_DIR}/${QT_VERSION}/gcc_64
+            Qt6_DIR=${{ env.QT_BASE_DIR }}/${{ matrix.version }}/gcc_64
+            QT6_INSTALL_DIR=${{ env.QT_BASE_DIR }}/${{ matrix.version }}/gcc_64
 
           CIBW_BEFORE_ALL_LINUX: |
             python -m pip install --upgrade pip
@@ -62,8 +62,8 @@ jobs:
 
           # macOS specific
           CIBW_ENVIRONMENT_MACOS: |
-            Qt6_DIR=${QT_BASE_DIR}/${QT_VERSION}/macos
-            QT6_INSTALL_DIR=${QT_BASE_DIR}/${QT_VERSION}/macos
+            Qt6_DIR=${{ env.QT_BASE_DIR }}/${{ matrix.version }}/macos
+            QT6_INSTALL_DIR=${{ env.QT_BASE_DIR }}/${{ matrix.version }}/macos
             PATH=/opt/homebrew/opt/llvm/bin:$PATH
             CC=/opt/homebrew/opt/llvm/bin/clang
             CXX=/opt/homebrew/opt/llvm/bin/clang++
