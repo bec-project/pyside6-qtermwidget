@@ -28,6 +28,10 @@ find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
 set(EXT_QTERMWIDGET_DIR "${CMAKE_CURRENT_SOURCE_DIR}/external/qtermwidget")
 set(EXT_LXQT_BUILD_TOOLS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/external/lxqt-build-tools")
 
+# lxqt-build-tools directories
+set(LXQT_BUILD_TOOLS_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/lxqt-build-tools-build")
+set(LXQT_BUILD_TOOLS_INSTALL_DIR "${CMAKE_CURRENT_BINARY_DIR}/lxqt-build-tools-install")
+
 # QTermWidget source and install directories
 set(QTERMWIDGET_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../qtermwidget")
 set(QTERMWIDGET_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/qtermwidget-build")
@@ -40,12 +44,26 @@ else()
     set(QTERMWIDGET_LIB "${QTERMWIDGET_DIR}/lib/libqtermwidget6.so")
 endif()
 
+# Build lxqt-build-tools as an external project (required by qtermwidget)
+# This mirrors the CI workflow step: "Build and install lxqt-build-tools"
+ExternalProject_Add(lxqt_build_tools_external
+    SOURCE_DIR ${EXT_LXQT_BUILD_TOOLS_DIR}
+    BINARY_DIR ${LXQT_BUILD_TOOLS_BUILD_DIR}
+    CMAKE_ARGS
+        -DCMAKE_PREFIX_PATH=${QT6_INSTALL_DIR}
+        -DCMAKE_INSTALL_PREFIX=${LXQT_BUILD_TOOLS_INSTALL_DIR}
+        -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+    BUILD_COMMAND ${CMAKE_COMMAND} --build ${LXQT_BUILD_TOOLS_BUILD_DIR}
+    INSTALL_COMMAND ${CMAKE_COMMAND} --install ${LXQT_BUILD_TOOLS_BUILD_DIR}
+)
+
 # Build qtermwidget as an external project
 ExternalProject_Add(qtermwidget_external
+    DEPENDS lxqt_build_tools_external
     SOURCE_DIR ${QTERMWIDGET_SOURCE_DIR}
     BINARY_DIR ${QTERMWIDGET_BUILD_DIR}
     CMAKE_ARGS
-        -DCMAKE_PREFIX_PATH=${QT6_INSTALL_DIR}
+        -DCMAKE_PREFIX_PATH=${QT6_INSTALL_DIR};${LXQT_BUILD_TOOLS_INSTALL_DIR}
         -DCMAKE_INSTALL_PREFIX=${QTERMWIDGET_DIR}
         -DCMAKE_INSTALL_RPATH=$ORIGIN
         -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
