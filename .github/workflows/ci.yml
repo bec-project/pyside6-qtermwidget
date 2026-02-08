@@ -49,7 +49,7 @@ jobs:
             Qt6_DIR=${{ github.workspace }}/Qt/${{ matrix.version }}/gcc_64
             QT6_INSTALL_DIR=${{ github.workspace }}/Qt/${{ matrix.version }}/gcc_64
 
-          CIBW_BEFORE_ALL_LINUX: >
+          CIBW_BEFORE_ALL_LINUX: |
             python -m pip install --upgrade pip
             python -m pip install aqtinstall
             python -m aqt install-qt linux desktop ${{ matrix.version }} --outputdir ${{ github.workspace }}/Qt
