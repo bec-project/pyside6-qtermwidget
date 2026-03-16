@@ -4,79 +4,68 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.os.runner }}
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}-${{ matrix.os.runner }}-${{ matrix.qt_version }}
+      cancel-in-progress: true
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
-        version: ["6.9.0"]
+        os: [{name: "linux", runner: "ubuntu-latest"}, {name: "macos", runner: "macos-latest"}]
+        qt_version: ["6.9.0"]
 
     steps:
-      - name: Checkout pyside6-qtermwidget
-        uses: actions/checkout@v4
-        with:
-          path: pyside6-qtermwidget
-          submodules: recursive
-
-      - name: Checkout qtermwidget
-        uses: actions/checkout@v4
-        with:
-          repository: lxqt/qtermwidget
-          ref: master
-          path: qtermwidget
-
       - name: Set up Python (host)
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
 
-      - name: Install cibuildwheel
-        run: python -m pip install --upgrade cibuildwheel
+      - name: Checkout pyside6-qtermwidget
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Restore cached Qt installation
+        id: cache-qt-lib-restore
+        uses: actions/cache/restore@v5
+        with:
+          path: ${{ github.workspace }}/Qt
+          key: qt-${{ matrix.qt_version }}-lib
+
+      - name: Install Qt Lib
+        if: steps.cache-qt-lib-restore.outputs.cache-hit != 'true'
+        run: |
+          python -m pip install aqtinstall
+          aqt install-qt linux desktop ${{ matrix.qt_version }} --outputdir ${{ github.workspace }}/Qt
+          aqt install-qt mac desktop ${{ matrix.qt_version }} --outputdir ${{ github.workspace }}/Qt
+      
+      - name: Save Qt lib cache
+        if: steps.cache-qt-lib-restore.outputs.cache-hit != 'true'
+        id: cache-qt-lib-save
+        uses: actions/cache/save@v5
+        with:
+          path: ${{ github.workspace }}/Qt
+          key: ${{ steps.cache-qt-lib-restore.outputs.cache-primary-key }}
+
+      - name: Generate pyproject.toml
+        run: |
+          python -m pip install jinja2-cli
+          jinja2 pyproject.toml.jinja -D QT_VERSION="${{ matrix.qt_version }}" -o pyproject.toml
+          echo "USING pyproject.toml:"
+          cat pyproject.toml
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v3.3.1
-        with:
-          package-dir: ./pyside6-qtermwidget
-          output-dir: ./wheelhouse
-          config-file: ./pyside6-qtermwidget/pyproject.toml
         env:
-          CIBW_BUILD: cp312-* #cp3{11,12,13}-* # Build for Python 3.11, 3.12, and 3.13
-          CIBW_SKIP: "*musllinux*"
-          CIBW_BUILD_VERBOSITY: 1
-
-          # Linux specific
-          CIBW_ENVIRONMENT_LINUX: >
-            Qt6_DIR=${{ github.workspace }}/Qt/${{ matrix.version }}/gcc_64
-            QT6_INSTALL_DIR=${{ github.workspace }}/Qt/${{ matrix.version }}/gcc_64
-            CMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ matrix.version }}/gcc_64/lib/cmake
-            LD_LIBRARY_PATH=${{ github.workspace }}/Qt/${{ matrix.version }}/gcc_64/lib:$LD_LIBRARY_PATH
-
-          CIBW_BEFORE_BUILD_LINUX: |
-            apt-get install libclang-dev
-            python -m pip install --upgrade pip
-            python -m pip install aqtinstall
-            python -m aqt install-qt linux desktop ${{ matrix.version }} --outputdir ${{ github.workspace }}/Qt
-            yum install -y mesa-libGL libxslt libxkbcommon-devel
-
-          CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_34
-
-          # macOS specific
+          CIBUILDWHEEL_WORKSPACE: ${{ github.workspace }}
           CIBW_ENVIRONMENT_MACOS: >
-            Qt6_DIR=${{ github.workspace }}/Qt/${{ matrix.version }}/macos
-            QT6_INSTALL_DIR=${{ github.workspace }}/Qt/${{ matrix.version }}/macos
-
-          CIBW_BEFORE_BUILD_MACOS: |
-            python -m pip install --upgrade pip
-            python -m pip install aqtinstall
-            python -m pip install PySide6==${{ matrix.version }} shiboken6==${{ matrix.version }} shiboken6-generator==${{ matrix.version }}
-            python -m aqt install-qt mac desktop ${{ matrix.version }} --outputdir ${{ github.workspace }}/Qt
-            brew install cmake llvm
-
-          CIBW_ARCHS_MACOS: arm64
-          CIBW_REPAIR_WHEEL_COMMAND_MACOS:
+            Qt6_DIR=${{ github.workspace }}/Qt/${{ matrix.qt_version }}/macos
+            QT6_INSTALL_DIR=${{ github.workspace }}/Qt/${{ matrix.qt_version }}/macos
+        with:
+          output-dir: ./wheelhouse
 
       - name: Upload wheels
         uses: actions/upload-artifact@v5
         with:
-          name: qtermwidget-${{ matrix.os }}-qt${{ matrix.version }}
+          name: qtermwidget-${{ matrix.os.name }}-qt${{ matrix.qt_version }}
           path: wheelhouse/*.whl

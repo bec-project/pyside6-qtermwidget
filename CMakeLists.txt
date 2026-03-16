@@ -6,7 +6,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 include(ExternalProject)
 
-find_package(Python3 COMPONENTS Interpreter Development.Module REQUIRED) # for macos:  Development.Embed
+find_package(Python3 COMPONENTS Interpreter Development.Module REQUIRED)
 
 # Qt6 installation directory (pass via -DQT6_INSTALL_DIR=... or set QT6_INSTALL_DIR environment variable)
 set(QT6_INSTALL_DIR "" CACHE PATH "Qt6 installation directory")
@@ -24,7 +24,19 @@ endif()
 list(APPEND CMAKE_PREFIX_PATH "${QT6_INSTALL_DIR}")
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
 
+# Clang can't find its own includes for some reason
+execute_process(
+    COMMAND bash -c "clang -print-resource-dir"
+    OUTPUT_VARIABLE SYSTEM_CLANG_RESOURCE_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+set(CMAKE_SKIP_BUILD_RPATH TRUE)
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
+set(INSTALL_REMOVE_ENVIRONMENT_RPATH TRUE)
+
 # Include component configurations
 include(cmake/LXQTBuildTools.cmake)
 include(cmake/QTermWidget.cmake)
 include(cmake/ShibokenBindings.cmake)
+

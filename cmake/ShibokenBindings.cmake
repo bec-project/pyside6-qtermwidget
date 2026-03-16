@@ -32,15 +32,8 @@ execute_process(
 message(STATUS "Shiboken include: ${SHIBOKEN_INCLUDE}")
 message(STATUS "Shiboken Generator include: ${SHIBOKEN_GENERATOR_INCLUDE}")
 message(STATUS "PySide include: ${PYSIDE_INCLUDE}")
+message(STATUS "Build output: ${CMAKE_BINARY_DIR}")
 message(STATUS "qtermwidget include: ${EXT_QTERMWIDGET_DIR}/lib")
-
-# print 'ls' of the qtermwidget lib directory for debugging
-execute_process(
-    COMMAND ls -l ${QTERMWIDGET_DIR}/include/qtermwidget6
-    OUTPUT_VARIABLE QTERMWIDGET_INCLUDE_CONTENTS
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-message(STATUS "Contents of qtermwidget include directory:\n${QTERMWIDGET_INCLUDE_CONTENTS}")
 
 # Get PySide6 typesystem path
 execute_process(
@@ -61,6 +54,8 @@ message(STATUS "Shiboken6 executable: ${SHIBOKEN6_EXECUTABLE}")
 
 # Build include paths for shiboken6
 set(SHIBOKEN_INCLUDE_PATHS
+    "/usr/lib64/llvm20/include"
+    "${SYSTEM_CLANG_RESOURCE_DIR}/include"
     "${QTERMWIDGET_DIR}/include"
     "${QTERMWIDGET_DIR}/include/qtermwidget6"
     "${QT6_INSTALL_DIR}/include"
@@ -103,39 +98,40 @@ set(SHIBOKEN_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build_bindings")
 # Custom command to generate Python bindings with Shiboken6
 add_custom_command(
     OUTPUT
-        ${SHIBOKEN_OUTPUT_DIR}/qtermwidget/qtermwidget_module_wrapper.cpp
-        ${SHIBOKEN_OUTPUT_DIR}/qtermwidget/qtermwidget_wrapper.cpp
+    ${SHIBOKEN_OUTPUT_DIR}/pyside6_qtermwidget/pyside6_qtermwidget_module_wrapper.cpp
+    ${SHIBOKEN_OUTPUT_DIR}/pyside6_qtermwidget/qtermwidget_wrapper.cpp
     COMMAND ${CMAKE_COMMAND} -E make_directory ${SHIBOKEN_OUTPUT_DIR}
     COMMAND ${SHIBOKEN6_EXECUTABLE}
-        ${SHIBOKEN_FLAGS}
-        --output-directory=${SHIBOKEN_OUTPUT_DIR}
-        --include-paths=${SHIBOKEN_INCLUDE_PATHS_STR}
-        --typesystem-paths=${PYSIDE_TYPESYSTEM}
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/qtermwidget_bindings.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/typesystem_qtermwidget.xml
+    ${SHIBOKEN_FLAGS}
+    --output-directory=${SHIBOKEN_OUTPUT_DIR}
+    --include-paths=${SHIBOKEN_INCLUDE_PATHS_STR}
+    --typesystem-paths=${PYSIDE_TYPESYSTEM}
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/qtermwidget_bindings.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/typesystem_qtermwidget.xml
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src
     DEPENDS
-        qtermwidget_external
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/qtermwidget_bindings.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/typesystem_qtermwidget.xml
+    qtermwidget_external
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/qtermwidget_bindings.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/typesystem_qtermwidget.xml
     COMMENT "Generating Python bindings with Shiboken6"
     VERBATIM
 )
 
 # Shiboken-generated sources
 set(SHIBOKEN_SOURCES
-    ${SHIBOKEN_OUTPUT_DIR}/qtermwidget/qtermwidget_module_wrapper.cpp
-    ${SHIBOKEN_OUTPUT_DIR}/qtermwidget/qtermwidget_wrapper.cpp
+    ${SHIBOKEN_OUTPUT_DIR}/pyside6_qtermwidget/pyside6_qtermwidget_module_wrapper.cpp
+    ${SHIBOKEN_OUTPUT_DIR}/pyside6_qtermwidget/qtermwidget_wrapper.cpp
 )
 
 # Build the Python extension 
-add_library(_qtermwidget MODULE ${SHIBOKEN_SOURCES})
+add_library(pyside6_qtermwidget MODULE ${SHIBOKEN_SOURCES})
 
 # Ensure qtermwidget is built before the Python extension
-add_dependencies(_qtermwidget qtermwidget_external)
+add_dependencies(pyside6_qtermwidget qtermwidget_external)
 
 # Includes 
-target_include_directories(_qtermwidget PRIVATE
+target_include_directories(pyside6_qtermwidget PRIVATE
+    ${SYSTEM_CLANG_RESOURCE_DIR}/include
     ${SHIBOKEN_INCLUDE}
     ${SHIBOKEN_GENERATOR_INCLUDE}
     ${PYSIDE_INCLUDE}
@@ -148,79 +144,91 @@ target_include_directories(_qtermwidget PRIVATE
     ${QTERMWIDGET_DIR}/include/qtermwidget6
 )
 
+# Get the path to the Shiboken and PySide libs
+execute_process(
+    COMMAND python3 -c "from pathlib import Path; import shiboken6; print(Path(shiboken6.__file__).parent)"
+    OUTPUT_VARIABLE SHIBOKEN_PYTHON_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+execute_process(
+    COMMAND python3 -c "from pathlib import Path; import PySide6; print(Path(PySide6.__file__).parent)"
+    OUTPUT_VARIABLE PYSIDE_PYTHON_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
 
-# Link libraries
-if (APPLE)
-    # Get the path to the Shiboken and PySide dylibs for macOS
-    execute_process(
-        COMMAND python3 -c "from pathlib import Path; import shiboken6; print(Path(shiboken6.__file__).parent)"
-        OUTPUT_VARIABLE SHIBOKEN_DYLIB_PATH
-        OUTPUT_STRIP_TRAILING_WHITESPACE
+if(APPLE)
+    set_target_properties(pyside6_qtermwidget PROPERTIES
+        PREFIX ""
+        OUTPUT_NAME "pyside6_qtermwidget"
+        INSTALL_RPATH "@loader_path;@loader_path/lib;@loader_path/../PySide6/;@loader_path/../PySide6/Qt/lib;@loader_path/../shiboken6"
+        INSTALL_NAME_DIR "@rpath"
     )
-
-    # Find the correct dylib for shiboken6 (e.g., libshiboken6.abi3.6.9.dylib)
-    file(GLOB SHIBOKEN_DYLIBS "${SHIBOKEN_DYLIB_PATH}/libshiboken6*.dylib")
-    list(GET SHIBOKEN_DYLIBS 0 SHIBOKEN_DYLIB_PATH)  # Take the first match
-
-    message(STATUS "Using Shiboken dylib: ${SHIBOKEN_DYLIB_PATH}")
-
-    # Get the path to the PySide dylib for macOS
-    execute_process(
-        COMMAND python3 -c "from pathlib import Path; import PySide6; print(Path(PySide6.__file__).parent)"
-        OUTPUT_VARIABLE PYSIDE_DYLIB_PATH
-        OUTPUT_STRIP_TRAILING_WHITESPACE
+    set(MACOSX_RPATH TRUE)
+    file(GLOB SHIBOKEN_DYLIBS
+        "${SHIBOKEN_PYTHON_DIR}/libshiboken6*.dylib"
     )
-
-    # Find the correct dylib for PySide6 (e.g., libpyside6.abi3.6.9.dylib)
-    file(GLOB PYSIDE_DYLIBS "${PYSIDE_DYLIB_PATH}/libpyside6*.dylib")
-    list(GET PYSIDE_DYLIBS 0 PYSIDE_DYLIB_PATH)  # Take the first match
-
-    message(STATUS "Using PySide dylib: ${PYSIDE_DYLIB_PATH}")
-
-    # Create imported target for qtermwidget library
-    add_library(qtermwidget6 SHARED IMPORTED)
-    set_target_properties(qtermwidget6 PROPERTIES
-        IMPORTED_LOCATION ${QTERMWIDGET_LIB}
+    file(GLOB PYSIDE_LIBS
+        "${PYSIDE_PYTHON_DIR}/libpyside6*.dylib"
     )
-    add_dependencies(qtermwidget6 qtermwidget_external)
-
-    target_link_libraries(_qtermwidget
-        Qt6::Core
-        Qt6::Gui
-        Qt6::Widgets
-        qtermwidget6
-        Python3::Python
-        ${SHIBOKEN_DYLIB_PATH}
-        ${PYSIDE_DYLIB_PATH}
+else()
+    set_target_properties(pyside6_qtermwidget PROPERTIES
+        PREFIX ""
+        OUTPUT_NAME "pyside6_qtermwidget"
+        INSTALL_RPATH "\$ORIGIN:\$ORIGIN/lib:\$ORIGIN/../PySide6/:\$ORIGIN/../PySide6/Qt/lib:\$ORIGIN/../shiboken6"
+        INSTALL_NAME_DIR "\$ORIGIN"
     )
-else ()
-    # Create imported target for qtermwidget library
-    add_library(qtermwidget6 SHARED IMPORTED)
-    set_target_properties(qtermwidget6 PROPERTIES
-        IMPORTED_LOCATION ${QTERMWIDGET_LIB}
+    file(GLOB SHIBOKEN_LIBS
+        "${SHIBOKEN_PYTHON_DIR}/libshiboken6*.so*"
     )
-    add_dependencies(qtermwidget6 qtermwidget_external)
-
-    target_link_libraries(_qtermwidget
-        Qt6::Core
-        Qt6::Gui
-        Qt6::Widgets
-        qtermwidget6
+    file(GLOB PYSIDE_LIBS
+        "${PYSIDE_PYTHON_DIR}/libpyside6*.so*"
     )
 endif()
 
-# RPATH so it finds libqtermwidget6.so in the same folder
-set_target_properties(_qtermwidget PROPERTIES
-    PREFIX ""
-    OUTPUT_NAME "_qtermwidget"
-    INSTALL_RPATH "$ORIGIN"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/qtermwidget"
+message(STATUS "Using Shiboken lib: ${SHIBOKEN_LIBS}")
+message(STATUS "Using PySide libs: ${PYSIDE_LIBS}")
+
+# Create imported target for qtermwidget library
+add_library(qtermwidget6 SHARED IMPORTED)
+set_target_properties(qtermwidget6 PROPERTIES
+    IMPORTED_LOCATION ${QTERMWIDGET_LIB}
+    INSTALL_NAME_DIR ${LIBQTW_INSTALL_RPATH}
+)
+if(APPLE)
+    set_target_properties(qtermwidget6 PROPERTIES
+        IMPORTED_SONAME "@rpath/libqtermwidget6.2.dylib"
+    )
+endif()
+add_dependencies(qtermwidget6 qtermwidget_external)
+
+target_link_libraries(pyside6_qtermwidget
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Widgets
+    qtermwidget6
+    Python3::Module
+    ${PYSIDE_LIBS}
+    ${SHIBOKEN_LIBS}
 )
 
-# Copy libqtermwidget6 library to qtermwidget package directory
-add_custom_command(TARGET _qtermwidget POST_BUILD
+install(TARGETS pyside6_qtermwidget
+    DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/pyside6_qtermwidget/
+)
+install(FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/__init__.py
+    DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/pyside6_qtermwidget/
+)
+add_custom_command(TARGET pyside6_qtermwidget POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<IF:$<PLATFORM_ID:Darwin>,${QTERMWIDGET_DIR}/lib/libqtermwidget6.dylib,${QTERMWIDGET_DIR}/lib/libqtermwidget6.so>
-        ${CMAKE_CURRENT_SOURCE_DIR}/qtermwidget/$<IF:$<PLATFORM_ID:Darwin>,libqtermwidget6.dylib,libqtermwidget6.so>
+    $<IF:$<PLATFORM_ID:Darwin>,${QTERMWIDGET_DIR}/lib/libqtermwidget6.dylib,${QTERMWIDGET_DIR}/lib64/libqtermwidget6.so.2>
+    ${CMAKE_CURRENT_SOURCE_DIR}/pyside6_qtermwidget/lib/$<IF:$<PLATFORM_ID:Darwin>,libqtermwidget6.2.dylib,libqtermwidget6.so.2>
     COMMENT "Copying libqtermwidget6 library to Python package directory"
 )
+install(CODE
+    "execute_process(COMMAND shiboken6-genpyi ${CMAKE_CURRENT_SOURCE_DIR}/pyside6_qtermwidget/pyside6_qtermwidget.so)"
+)
+
+# add_custom_command(TARGET pyside6_qtermwidget POST_BUILD
+#     COMMAND sleep 10000
+#     COMMENT "wait for inspection"
+# )

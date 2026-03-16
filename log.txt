@@ -1,0 +1,809 @@
+
+     _ _       _ _   _       _           _
+ ___|_| |_ _ _|_| |_| |_ _ _| |_ ___ ___| |
+|  _| | . | | | | | . | | | |   | -_| -_| |
+|___|_|___|___|_|_|___|_____|_|_|___|___|_|
+
+cibuildwheel version 3.4.0
+
+Build options:
+  platform: linux
+  allow_empty: False
+  architectures: x86_64
+  build_selector: 
+    build_config: *
+    skip_config: 
+    requires_python: >=3.11
+    enable: []
+  output_dir: /home/perl_d/Development/bec/pyside6-qtermwidget/wheelhouse
+  package_dir: /home/perl_d/Development/bec/pyside6-qtermwidget
+  test_selector: 
+    skip_config:
+  before_all: 
+  before_build: dnf install -y libstdc++-devel mesa-libGL libxslt libxslt-devel libxkbcommon-devel clang clang-devel && python -m pip install --upgrade pip
+  before_test: 
+  build_frontend: build
+  build_verbosity: 0
+  config_settings: 
+  container_engine: podman
+  dependency_constraints: pinned
+  environment: 
+    http_proxy="http://host.containers.internal:3128"
+    Qt6_DIR="/host/tmp/Qt/6.9.0/gcc_64"
+    QT6_INSTALL_DIR="/host/tmp/Qt/6.9.0/gcc_64"
+    CMAKE_PREFIX_PATH="/host/tmp/Qt/6.9.0/gcc_64/lib/cmake"
+    LD_LIBRARY_PATH="/host/tmp/Qt/6.9.0/gcc_64/lib:$LD_LIBRARY_PATH"
+    CC="clang"
+    CXX="clang++"
+  manylinux_images: 
+    x86_64: quay.io/pypa/manylinux_2_28_x86_64:2026.03.01-1
+    i686: quay.io/pypa/manylinux_2_28_i686:2026.03.01-1
+    pypy_x86_64: quay.io/pypa/manylinux_2_28_x86_64:2026.03.01-1
+    aarch64: quay.io/pypa/manylinux_2_28_aarch64:2026.03.01-1
+    ppc64le: quay.io/pypa/manylinux_2_28_ppc64le:2026.03.01-1
+    s390x: quay.io/pypa/manylinux_2_28_s390x:2026.03.01-1
+    armv7l: quay.io/pypa/manylinux_2_31_armv7l:2026.03.01-1
+    riscv64: quay.io/pypa/manylinux_2_39_riscv64:2026.03.01-1
+    pypy_aarch64: quay.io/pypa/manylinux_2_28_aarch64:2026.03.01-1
+    pypy_i686: quay.io/pypa/manylinux_2_28_i686:2026.03.01-1
+  musllinux_images: 
+    x86_64: quay.io/pypa/musllinux_1_2_x86_64:2026.03.01-1
+    i686: quay.io/pypa/musllinux_1_2_i686:2026.03.01-1
+    aarch64: quay.io/pypa/musllinux_1_2_aarch64:2026.03.01-1
+    ppc64le: quay.io/pypa/musllinux_1_2_ppc64le:2026.03.01-1
+    s390x: quay.io/pypa/musllinux_1_2_s390x:2026.03.01-1
+    armv7l: quay.io/pypa/musllinux_1_2_armv7l:2026.03.01-1
+    riscv64: quay.io/pypa/musllinux_1_2_riscv64:2026.03.01-1
+  pyodide_version: None
+  repair_command: auditwheel repair -w {dest_dir} {wheel}
+  test_command: 
+  test_environment: 
+  test_extras: 
+  test_groups: 
+  test_requires: 
+  test_runtime: 
+    args: ()
+  test_sources: 
+  xbuild_tools: None
+
+Cache folder: /home/perl_d/.cache/cibuildwheel
+
+Here we go!
+
+Starting container image quay.io/pypa/manylinux_2_28_x86_64:2026.03.01-1...
+
+info: This container will host the build for cp311-manylinux_x86_64, cp312-manylinux_x86_64, cp313-manylinux_x86_64, cp314-manylinux_x86_64, cp314t-manylinux_x86_64...
++ podman version -f '{{json .}}'
++ podman image inspect quay.io/pypa/manylinux_2_28_x86_64:2026.03.01-1 --format '{{.Os}}/{{.Architecture}}'
+08ce51d90038c8689892d4deb15e5256671cf5c00c1ddf29dca264dc8fccf7fc
+    + /bin/true
+    + mkdir -p /project
+    + manylinux-interpreters --help
+    + manylinux-interpreters ensure cp311-cp311
+'cp311-cp311' already installed at '/opt/python/cp311-cp311'
+    + manylinux-interpreters ensure cp312-cp312
+'cp312-cp312' already installed at '/opt/python/cp312-cp312'
+    + manylinux-interpreters ensure cp313-cp313
+'cp313-cp313' already installed at '/opt/python/cp313-cp313'
+    + manylinux-interpreters ensure cp314-cp314
+'cp314-cp314' already installed at '/opt/python/cp314-cp314'
+    + manylinux-interpreters ensure cp314-cp314t
+'cp314-cp314t' already installed at '/opt/python/cp314-cp314t'
+
+                                                                       ✓ 0.56s
+Copying project into container...
+
+    + mkdir -p /project
+
+                                                                       ✓ 0.16s
+
+Building cp311-manylinux_x86_64 wheel
+CPython 3.11 manylinux x86_64
+
+Setting up build environment...
+
+    + mkdir -p /
+    + /opt/python/cp39-cp39/bin/python -c 'import sys, json, os; json.dump(os.environ.copy(), sys.stdout)'
+    + which python
+    + which pip
+
+                                                                       ✓ 0.16s
+Running before_build...
+
+    + sh -c 'dnf install -y libstdc++-devel mesa-libGL libxslt libxslt-devel libxkbcommon-devel clang clang-devel && python -m pip install --upgrade pip'
+AlmaLinux 8 - BaseOS                            123 MB/s |  60 MB     00:00    
+AlmaLinux 8 - AppStream                          60 MB/s |  25 MB     00:00    
+AlmaLinux 8 - Extras                             38 kB/s |  14 kB     00:00    
+AlmaLinux 8 - PowerTools                         15 MB/s | 5.6 MB     00:00    
+Extra Packages for Enterprise Linux 8 - x86_64   25 MB/s |  14 MB     00:00    
+Package libstdc++-devel-8.5.0-28.el8_10.alma.1.x86_64 is already installed.
+Package mesa-libGL-23.1.4-4.el8_10.alma.1.x86_64 is already installed.
+Dependencies resolved.
+============================================================================================
+ Package                     Arch    Version                                Repo        Size
+============================================================================================
+Installing:
+ clang                       x86_64  20.1.8-2.module_el8.10.0+4062+b20d4441 appstream  190 k
+ clang-devel                 x86_64  20.1.8-2.module_el8.10.0+4062+b20d4441 appstream  3.9 M
+ libxkbcommon-devel          x86_64  0.9.1-1.el8                            appstream   60 k
+ libxslt                     x86_64  1.1.32-6.3.el8_10                      baseos     249 k
+ libxslt-devel               x86_64  1.1.32-6.3.el8_10                      appstream  322 k
+Installing dependencies:
+ clang-libs                  x86_64  20.1.8-2.module_el8.10.0+4062+b20d4441 appstream   32 M
+ clang-resource-filesystem   x86_64  20.1.8-2.module_el8.10.0+4062+b20d4441 appstream   41 k
+ clang-tools-extra           x86_64  20.1.8-2.module_el8.10.0+4062+b20d4441 appstream   21 M
+ cmake-filesystem            x86_64  3.26.5-2.el8                           appstream   44 k
+ gcc-c++                     x86_64  8.5.0-28.el8_10.alma.1                 appstream   12 M
+ libgcrypt-devel             x86_64  1.8.5-7.el8_6                          baseos     148 k
+ libgpg-error-devel          x86_64  1.31-1.el8                             baseos      64 k
+ libxkbcommon                x86_64  0.9.1-1.el8                            appstream  116 k
+ libxml2-devel               x86_64  2.9.7-21.el8_10.3                      appstream  1.0 M
+ libzstd-devel               x86_64  1.4.4-1.el8                            baseos      43 k
+ llvm                        x86_64  20.1.8-2.module_el8.10.0+4062+b20d4441 appstream   26 M
+ llvm-devel                  x86_64  20.1.8-2.module_el8.10.0+4062+b20d4441 appstream  5.1 M
+ llvm-filesystem             x86_64  20.1.8-2.module_el8.10.0+4062+b20d4441 appstream   35 k
+ llvm-googletest             x86_64  20.1.8-2.module_el8.10.0+4062+b20d4441 appstream  567 k
+ llvm-libs                   x86_64  20.1.8-2.module_el8.10.0+4062+b20d4441 appstream   34 M
+ llvm-static                 x86_64  20.1.8-2.module_el8.10.0+4062+b20d4441 appstream   62 M
+ llvm-test                   x86_64  20.1.8-2.module_el8.10.0+4062+b20d4441 appstream  759 k
+ python3.12                  x86_64  3.12.12-3.el8_10                       appstream   31 k
+ python3.12-libs             x86_64  3.12.12-3.el8_10                       appstream   10 M
+ python3.12-pip-wheel        noarch  23.2.1-4.el8                           appstream  1.5 M
+ xkeyboard-config            noarch  2.28-1.el8                             appstream  782 k
+ xz-devel                    x86_64  5.2.4-4.el8_6                          baseos      62 k
+Installing weak dependencies:
+ compiler-rt                 x86_64  20.1.8-2.module_el8.10.0+4062+b20d4441 appstream  4.1 M
+ libomp                      x86_64  20.1.8-2.module_el8.10.0+4062+b20d4441 appstream  500 k
+ libomp-devel                x86_64  20.1.8-2.module_el8.10.0+4062+b20d4441 appstream   64 k
+ python3.12-tkinter          x86_64  3.12.12-3.el8_10                       appstream  402 k
+Enabling module streams:
+ llvm-toolset                        rhel8                                                  
+
+Transaction Summary
+============================================================================================
+Install  31 Packages
+
+Total download size: 218 M
+Installed size: 1.1 G
+Downloading Packages:
+(1/31): libgpg-error-devel-1.31-1.el8.x86_64.rp 5.7 MB/s |  64 kB     00:00    
+(2/31): libgcrypt-devel-1.8.5-7.el8_6.x86_64.rp  10 MB/s | 148 kB     00:00    
+(3/31): libzstd-devel-1.4.4-1.el8.x86_64.rpm    9.7 MB/s |  43 kB     00:00    
+(4/31): xz-devel-5.2.4-4.el8_6.x86_64.rpm        15 MB/s |  62 kB     00:00    
+(5/31): libxslt-1.1.32-6.3.el8_10.x86_64.rpm     12 MB/s | 249 kB     00:00    
+(6/31): clang-20.1.8-2.module_el8.10.0+4062+b20  21 MB/s | 190 kB     00:00    
+(7/31): clang-resource-filesystem-20.1.8-2.modu  19 MB/s |  41 kB     00:00    
+(8/31): clang-tools-extra-20.1.8-2.module_el8.1 411 MB/s |  21 MB     00:00    
+(9/31): cmake-filesystem-3.26.5-2.el8.x86_64.rp  23 MB/s |  44 kB     00:00    
+(10/31): clang-devel-20.1.8-2.module_el8.10.0+4  52 MB/s | 3.9 MB     00:00    
+(11/31): compiler-rt-20.1.8-2.module_el8.10.0+4 204 MB/s | 4.1 MB     00:00    
+(12/31): libomp-20.1.8-2.module_el8.10.0+4062+b 185 MB/s | 500 kB     00:00    
+(13/31): libomp-devel-20.1.8-2.module_el8.10.0+  50 MB/s |  64 kB     00:00    
+(14/31): libxkbcommon-0.9.1-1.el8.x86_64.rpm     82 MB/s | 116 kB     00:00    
+(15/31): libxkbcommon-devel-0.9.1-1.el8.x86_64.  58 MB/s |  60 kB     00:00    
+(16/31): libxml2-devel-2.9.7-21.el8_10.3.x86_64 243 MB/s | 1.0 MB     00:00    
+(17/31): libxslt-devel-1.1.32-6.3.el8_10.x86_64 178 MB/s | 322 kB     00:00    
+(18/31): clang-libs-20.1.8-2.module_el8.10.0+40 254 MB/s |  32 MB     00:00    
+(19/31): llvm-devel-20.1.8-2.module_el8.10.0+40 307 MB/s | 5.1 MB     00:00    
+(20/31): llvm-filesystem-20.1.8-2.module_el8.10  35 MB/s |  35 kB     00:00    
+(21/31): llvm-googletest-20.1.8-2.module_el8.10 143 MB/s | 567 kB     00:00    
+(22/31): gcc-c++-8.5.0-28.el8_10.alma.1.x86_64. 121 MB/s |  12 MB     00:00    
+(23/31): llvm-20.1.8-2.module_el8.10.0+4062+b20 221 MB/s |  26 MB     00:00    
+(24/31): llvm-test-20.1.8-2.module_el8.10.0+406 224 MB/s | 759 kB     00:00    
+(25/31): python3.12-3.12.12-3.el8_10.x86_64.rpm  29 MB/s |  31 kB     00:00    
+(26/31): python3.12-libs-3.12.12-3.el8_10.x86_6 360 MB/s |  10 MB     00:00    
+(27/31): python3.12-pip-wheel-23.2.1-4.el8.noar 243 MB/s | 1.5 MB     00:00    
+(28/31): python3.12-tkinter-3.12.12-3.el8_10.x8 181 MB/s | 402 kB     00:00    
+(29/31): xkeyboard-config-2.28-1.el8.noarch.rpm 252 MB/s | 782 kB     00:00    
+(30/31): llvm-libs-20.1.8-2.module_el8.10.0+406 249 MB/s |  34 MB     00:00    
+(31/31): llvm-static-20.1.8-2.module_el8.10.0+4 258 MB/s |  62 MB     00:00    
+--------------------------------------------------------------------------------
+Total                                           200 MB/s | 218 MB     00:01     
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                        1/1 
+  Installing       : llvm-filesystem-20.1.8-2.module_el8.10.0+4062+b20d    1/31 
+  Installing       : llvm-libs-20.1.8-2.module_el8.10.0+4062+b20d4441.x    2/31 
+  Installing       : cmake-filesystem-3.26.5-2.el8.x86_64                  3/31 
+  Installing       : clang-resource-filesystem-20.1.8-2.module_el8.10.0    4/31 
+  Installing       : libomp-20.1.8-2.module_el8.10.0+4062+b20d4441.x86_    5/31 
+  Installing       : libgpg-error-devel-1.31-1.el8.x86_64                  6/31 
+  Running scriptlet: libgpg-error-devel-1.31-1.el8.x86_64                  6/31 
+  Installing       : libgcrypt-devel-1.8.5-7.el8_6.x86_64                  7/31 
+  Running scriptlet: libgcrypt-devel-1.8.5-7.el8_6.x86_64                  7/31 
+  Installing       : libomp-devel-20.1.8-2.module_el8.10.0+4062+b20d444    8/31 
+  Installing       : llvm-googletest-20.1.8-2.module_el8.10.0+4062+b20d    9/31 
+  Installing       : llvm-static-20.1.8-2.module_el8.10.0+4062+b20d4441   10/31 
+  Installing       : xkeyboard-config-2.28-1.el8.noarch                   11/31 
+  Installing       : libxkbcommon-0.9.1-1.el8.x86_64                      12/31 
+  Installing       : python3.12-pip-wheel-23.2.1-4.el8.noarch             13/31 
+  Installing       : python3.12-libs-3.12.12-3.el8_10.x86_64              14/31 
+  Installing       : python3.12-3.12.12-3.el8_10.x86_64                   15/31 
+  Running scriptlet: python3.12-3.12.12-3.el8_10.x86_64                   15/31 
+  Installing       : python3.12-tkinter-3.12.12-3.el8_10.x86_64           16/31 
+  Installing       : llvm-20.1.8-2.module_el8.10.0+4062+b20d4441.x86_64   17/31 
+  Installing       : llvm-test-20.1.8-2.module_el8.10.0+4062+b20d4441.x   18/31 
+  Installing       : compiler-rt-20.1.8-2.module_el8.10.0+4062+b20d4441   19/31 
+  Installing       : clang-libs-20.1.8-2.module_el8.10.0+4062+b20d4441.   20/31 
+  Installing       : clang-tools-extra-20.1.8-2.module_el8.10.0+4062+b2   21/31 
+  Installing       : gcc-c++-8.5.0-28.el8_10.alma.1.x86_64                22/31 
+  Installing       : clang-20.1.8-2.module_el8.10.0+4062+b20d4441.x86_6   23/31 
+  Installing       : xz-devel-5.2.4-4.el8_6.x86_64                        24/31 
+  Installing       : libxml2-devel-2.9.7-21.el8_10.3.x86_64               25/31 
+  Installing       : libzstd-devel-1.4.4-1.el8.x86_64                     26/31 
+  Installing       : llvm-devel-20.1.8-2.module_el8.10.0+4062+b20d4441.   27/31 
+  Running scriptlet: llvm-devel-20.1.8-2.module_el8.10.0+4062+b20d4441.   27/31 
+  Installing       : libxslt-1.1.32-6.3.el8_10.x86_64                     28/31 
+  Installing       : libxslt-devel-1.1.32-6.3.el8_10.x86_64               29/31 
+  Installing       : clang-devel-20.1.8-2.module_el8.10.0+4062+b20d4441   30/31 
+  Installing       : libxkbcommon-devel-0.9.1-1.el8.x86_64                31/31 
+  Running scriptlet: libxkbcommon-devel-0.9.1-1.el8.x86_64                31/31 
+  Verifying        : libgcrypt-devel-1.8.5-7.el8_6.x86_64                  1/31 
+  Verifying        : libgpg-error-devel-1.31-1.el8.x86_64                  2/31 
+  Verifying        : libxslt-1.1.32-6.3.el8_10.x86_64                      3/31 
+  Verifying        : libzstd-devel-1.4.4-1.el8.x86_64                      4/31 
+  Verifying        : xz-devel-5.2.4-4.el8_6.x86_64                         5/31 
+  Verifying        : clang-20.1.8-2.module_el8.10.0+4062+b20d4441.x86_6    6/31 
+  Verifying        : clang-devel-20.1.8-2.module_el8.10.0+4062+b20d4441    7/31 
+  Verifying        : clang-libs-20.1.8-2.module_el8.10.0+4062+b20d4441.    8/31 
+  Verifying        : clang-resource-filesystem-20.1.8-2.module_el8.10.0    9/31 
+  Verifying        : clang-tools-extra-20.1.8-2.module_el8.10.0+4062+b2   10/31 
+  Verifying        : cmake-filesystem-3.26.5-2.el8.x86_64                 11/31 
+  Verifying        : compiler-rt-20.1.8-2.module_el8.10.0+4062+b20d4441   12/31 
+  Verifying        : gcc-c++-8.5.0-28.el8_10.alma.1.x86_64                13/31 
+  Verifying        : libomp-20.1.8-2.module_el8.10.0+4062+b20d4441.x86_   14/31 
+  Verifying        : libomp-devel-20.1.8-2.module_el8.10.0+4062+b20d444   15/31 
+  Verifying        : libxkbcommon-0.9.1-1.el8.x86_64                      16/31 
+  Verifying        : libxkbcommon-devel-0.9.1-1.el8.x86_64                17/31 
+  Verifying        : libxml2-devel-2.9.7-21.el8_10.3.x86_64               18/31 
+  Verifying        : libxslt-devel-1.1.32-6.3.el8_10.x86_64               19/31 
+  Verifying        : llvm-20.1.8-2.module_el8.10.0+4062+b20d4441.x86_64   20/31 
+  Verifying        : llvm-devel-20.1.8-2.module_el8.10.0+4062+b20d4441.   21/31 
+  Verifying        : llvm-filesystem-20.1.8-2.module_el8.10.0+4062+b20d   22/31 
+  Verifying        : llvm-googletest-20.1.8-2.module_el8.10.0+4062+b20d   23/31 
+  Verifying        : llvm-libs-20.1.8-2.module_el8.10.0+4062+b20d4441.x   24/31 
+  Verifying        : llvm-static-20.1.8-2.module_el8.10.0+4062+b20d4441   25/31 
+  Verifying        : llvm-test-20.1.8-2.module_el8.10.0+4062+b20d4441.x   26/31 
+  Verifying        : python3.12-3.12.12-3.el8_10.x86_64                   27/31 
+  Verifying        : python3.12-libs-3.12.12-3.el8_10.x86_64              28/31 
+  Verifying        : python3.12-pip-wheel-23.2.1-4.el8.noarch             29/31 
+  Verifying        : python3.12-tkinter-3.12.12-3.el8_10.x86_64           30/31 
+  Verifying        : xkeyboard-config-2.28-1.el8.noarch                   31/31 
+
+Installed:
+  clang-20.1.8-2.module_el8.10.0+4062+b20d4441.x86_64                           
+  clang-devel-20.1.8-2.module_el8.10.0+4062+b20d4441.x86_64                     
+  clang-libs-20.1.8-2.module_el8.10.0+4062+b20d4441.x86_64                      
+  clang-resource-filesystem-20.1.8-2.module_el8.10.0+4062+b20d4441.x86_64       
+  clang-tools-extra-20.1.8-2.module_el8.10.0+4062+b20d4441.x86_64               
+  cmake-filesystem-3.26.5-2.el8.x86_64                                          
+  compiler-rt-20.1.8-2.module_el8.10.0+4062+b20d4441.x86_64                     
+  gcc-c++-8.5.0-28.el8_10.alma.1.x86_64                                         
+  libgcrypt-devel-1.8.5-7.el8_6.x86_64                                          
+  libgpg-error-devel-1.31-1.el8.x86_64                                          
+  libomp-20.1.8-2.module_el8.10.0+4062+b20d4441.x86_64                          
+  libomp-devel-20.1.8-2.module_el8.10.0+4062+b20d4441.x86_64                    
+  libxkbcommon-0.9.1-1.el8.x86_64                                               
+  libxkbcommon-devel-0.9.1-1.el8.x86_64                                         
+  libxml2-devel-2.9.7-21.el8_10.3.x86_64                                        
+  libxslt-1.1.32-6.3.el8_10.x86_64                                              
+  libxslt-devel-1.1.32-6.3.el8_10.x86_64                                        
+  libzstd-devel-1.4.4-1.el8.x86_64                                              
+  llvm-20.1.8-2.module_el8.10.0+4062+b20d4441.x86_64                            
+  llvm-devel-20.1.8-2.module_el8.10.0+4062+b20d4441.x86_64                      
+  llvm-filesystem-20.1.8-2.module_el8.10.0+4062+b20d4441.x86_64                 
+  llvm-googletest-20.1.8-2.module_el8.10.0+4062+b20d4441.x86_64                 
+  llvm-libs-20.1.8-2.module_el8.10.0+4062+b20d4441.x86_64                       
+  llvm-static-20.1.8-2.module_el8.10.0+4062+b20d4441.x86_64                     
+  llvm-test-20.1.8-2.module_el8.10.0+4062+b20d4441.x86_64                       
+  python3.12-3.12.12-3.el8_10.x86_64                                            
+  python3.12-libs-3.12.12-3.el8_10.x86_64                                       
+  python3.12-pip-wheel-23.2.1-4.el8.noarch                                      
+  python3.12-tkinter-3.12.12-3.el8_10.x86_64                                    
+  xkeyboard-config-2.28-1.el8.noarch                                            
+  xz-devel-5.2.4-4.el8_6.x86_64                                                 
+
+Complete!
+Requirement already satisfied: pip in /opt/python/cp311-cp311/lib/python3.11/site-packages (26.0.1)
+
+                                                                      ✓ 27.10s
+Building wheel...
+
+    + rm -rf /tmp/cibuildwheel/built_wheel
+    + mkdir -p /tmp/cibuildwheel/built_wheel
+    + python -m build /project --wheel --outdir=/tmp/cibuildwheel/built_wheel
+*** scikit-build-core 0.12.2 using CMake 4.2.1 (wheel)
+*** Configuring CMake...
+loading initial cache file build/cp311-cp311-linux_x86_64/CMakeInit.txt
+-- The C compiler identification is Clang 20.1.8
+-- The CXX compiler identification is Clang 20.1.8
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/clang - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/clang++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found Python3: /tmp/build-env-cs0am078/bin/python (found version "3.11.14") found components: Interpreter Development.Module
+-- Using QT6_INSTALL_DIR from environment: /host/tmp/Qt/6.9.0/gcc_64
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Check if compiler accepts -pthread
+-- Check if compiler accepts -pthread - yes
+-- Found Threads: TRUE
+-- Performing Test HAVE_STDATOMIC
+-- Performing Test HAVE_STDATOMIC - Success
+-- Found WrapAtomic: TRUE
+-- Found OpenGL: /usr/lib64/libOpenGL.so
+-- Found WrapOpenGL: TRUE
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+-- Shiboken include: /tmp/build-env-cs0am078/lib/python3.11/site-packages/shiboken6/include
+-- Shiboken Generator include: /tmp/build-env-cs0am078/lib/python3.11/site-packages/shiboken6_generator/include
+-- PySide include: /tmp/build-env-cs0am078/lib/python3.11/site-packages/PySide6/include
+-- qtermwidget include: /project/external/qtermwidget/lib
+-- Contents of qtermwidget include directory:
+
+-- PySide typesystem: /tmp/build-env-cs0am078/lib/python3.11/site-packages/PySide6/typesystems
+-- Shiboken6 executable: /tmp/build-env-cs0am078/lib/python3.11/site-packages/shiboken6_generator/shiboken6
+-- Configuring done (1.1s)
+-- Generating done (0.0s)
+-- Build files have been written to: /project/build/cp311-cp311-linux_x86_64
+*** Building project with Ninja...
+Change Dir: '/project/build/cp311-cp311-linux_x86_64'
+
+Run Build Command(s): /tmp/build-env-cs0am078/bin/ninja -v
+[1/20] cd /project/build/cp311-cp311-linux_x86_64 && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -Dcfgdir= -P /project/build/cp311-cp311-linux_x86_64/lxqt_build_tools_external-prefix/tmp/lxqt_build_tools_external-mkdirs.cmake && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E touch /project/build/cp311-cp311-linux_x86_64/lxqt_build_tools_external-prefix/src/lxqt_build_tools_external-stamp/lxqt_build_tools_external-mkdir
+[2/20] cd /project/build/cp311-cp311-linux_x86_64 && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E echo_append && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E touch /project/build/cp311-cp311-linux_x86_64/lxqt_build_tools_external-prefix/src/lxqt_build_tools_external-stamp/lxqt_build_tools_external-download
+[3/20] cd /project/build/cp311-cp311-linux_x86_64 && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E echo_append && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E touch /project/build/cp311-cp311-linux_x86_64/lxqt_build_tools_external-prefix/src/lxqt_build_tools_external-stamp/lxqt_build_tools_external-update
+[4/20] cd /project/build/cp311-cp311-linux_x86_64 && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E echo_append && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E touch /project/build/cp311-cp311-linux_x86_64/lxqt_build_tools_external-prefix/src/lxqt_build_tools_external-stamp/lxqt_build_tools_external-patch
+[5/20] cd /project/build/cp311-cp311-linux_x86_64/lxqt-build-tools-build && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -DCMAKE_PREFIX_PATH=/host/tmp/Qt/6.9.0/gcc_64 -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_BUILD_TYPE=Release -GNinja -S /project/external/lxqt-build-tools -B /project/build/cp311-cp311-linux_x86_64/lxqt-build-tools-build && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E touch /project/build/cp311-cp311-linux_x86_64/lxqt_build_tools_external-prefix/src/lxqt_build_tools_external-stamp/lxqt_build_tools_external-configure
+-- The C compiler identification is Clang 20.1.8
+-- The CXX compiler identification is Clang 20.1.8
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/clang - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/clang++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Check if compiler accepts -pthread
+-- Check if compiler accepts -pthread - yes
+-- Found Threads: TRUE
+-- Got nothing from: /host/tmp/Qt/6.9.0/gcc_64/bin/qtpaths --query "QT_INSTALL_CONFIGURATION"
+-- Unable to autodetect LXQT_ETC_XDG_DIR. LXQT_ETC_XDG_DIR will be set to '/etc/xdg'
+-- You can set it manually with -DLXQT_ETC_XDG_DIR=<value>
+-- 
+-- The following REQUIRED packages have been found:
+
+ * Qt6CoreTools
+ * Qt6
+
+-- Configuring done (0.6s)
+-- Generating done (0.0s)
+-- Build files have been written to: /project/build/cp311-cp311-linux_x86_64/lxqt-build-tools-build
+[6/20] cd /project/build/cp311-cp311-linux_x86_64/lxqt-build-tools-build && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake --build /project/build/cp311-cp311-linux_x86_64/lxqt-build-tools-build && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E touch /project/build/cp311-cp311-linux_x86_64/lxqt_build_tools_external-prefix/src/lxqt_build_tools_external-stamp/lxqt_build_tools_external-build
+ninja: no work to do.
+[7/20] cd /project/build/cp311-cp311-linux_x86_64/lxqt-build-tools-build && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake --install /project/build/cp311-cp311-linux_x86_64/lxqt-build-tools-build && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E touch /project/build/cp311-cp311-linux_x86_64/lxqt_build_tools_external-prefix/src/lxqt_build_tools_external-stamp/lxqt_build_tools_external-install
+-- Install configuration: "Release"
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/lxqt2-build-tools-config.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/lxqt2-build-tools-config-version.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/find-modules/FindClazy.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/find-modules/FindExif.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/find-modules/FindFontconfig.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/find-modules/FindGLIB.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/find-modules/FindMenuCache.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/find-modules/FindUDev.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/find-modules/FindXKBCommon.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/find-modules/FindXTerm.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/find-modules/FindXdgEmail.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/find-modules/FindXdgMime.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/find-modules/FindXdgOpen.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/find-modules/FindXdgScreensaver.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/find-modules/FindXdgSettings.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/find-modules/FindXdgUserDirs.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/modules/ECMFindModuleHelpers.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/modules/LXQtAppTranslationLoader.cpp.in
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/modules/LXQtCompilerSettings.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/modules/LXQtCreatePkgConfigFile.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/modules/LXQtCreatePortableHeaders.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/modules/LXQtLibTranslationLoader.cpp.in
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/modules/LXQtPluginTranslationLoader.cpp.in
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/modules/LXQtPreventInSourceBuilds.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/modules/LXQtQueryQt.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/modules/LXQtTranslate.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/modules/LXQtTranslateDesktop.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/modules/LXQtTranslationLoader.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/modules/Qt6TranslationLoader.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/modules/Qt6TranslationLoader.cpp.in
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/modules/LXQtTranslateDesktopYaml.pl
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/modules/LXQtConfigVars.cmake
+-- Installing: /usr/local/share/cmake/lxqt2-build-tools/modules/LXQtTranslateTs.cmake
+-- Installing: /usr/local/bin/lxqt2-transupdate
+[8/20] cd /project/build/cp311-cp311-linux_x86_64 && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E make_directory /project/build/cp311-cp311-linux_x86_64/CMakeFiles && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E touch /project/build/cp311-cp311-linux_x86_64/CMakeFiles/lxqt_build_tools_external-complete && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E touch /project/build/cp311-cp311-linux_x86_64/lxqt_build_tools_external-prefix/src/lxqt_build_tools_external-stamp/lxqt_build_tools_external-done
+[9/20] cd /project/build/cp311-cp311-linux_x86_64 && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -Dcfgdir= -P /project/build/cp311-cp311-linux_x86_64/qtermwidget_external-prefix/tmp/qtermwidget_external-mkdirs.cmake && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E touch /project/build/cp311-cp311-linux_x86_64/qtermwidget_external-prefix/src/qtermwidget_external-stamp/qtermwidget_external-mkdir
+[10/20] cd /project/build/cp311-cp311-linux_x86_64 && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E echo_append && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E touch /project/build/cp311-cp311-linux_x86_64/qtermwidget_external-prefix/src/qtermwidget_external-stamp/qtermwidget_external-download
+[11/20] cd /project/build/cp311-cp311-linux_x86_64 && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E echo_append && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E touch /project/build/cp311-cp311-linux_x86_64/qtermwidget_external-prefix/src/qtermwidget_external-stamp/qtermwidget_external-update
+[12/20] cd /project/build/cp311-cp311-linux_x86_64 && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E echo_append && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E touch /project/build/cp311-cp311-linux_x86_64/qtermwidget_external-prefix/src/qtermwidget_external-stamp/qtermwidget_external-patch
+[13/20] cd /project/build/cp311-cp311-linux_x86_64/qtermwidget-build && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -DCMAKE_PREFIX_PATH=/host/tmp/Qt/6.9.0/gcc_64 -DCMAKE_INSTALL_PREFIX=/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install "-DCMAKE_INSTALL_RPATH=\$ORIGIN" -DCMAKE_BUILD_TYPE=Release -GNinja -S /project/external/qtermwidget -B /project/build/cp311-cp311-linux_x86_64/qtermwidget-build && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E touch /project/build/cp311-cp311-linux_x86_64/qtermwidget_external-prefix/src/qtermwidget_external-stamp/qtermwidget_external-configure
+-- The C compiler identification is Clang 20.1.8
+-- The CXX compiler identification is Clang 20.1.8
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/clang - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/clang++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Check if compiler accepts -pthread
+-- Check if compiler accepts -pthread - yes
+-- Found Threads: TRUE
+-- Performing Test HAVE_STDATOMIC
+-- Performing Test HAVE_STDATOMIC - Success
+-- Found WrapAtomic: TRUE
+-- Found OpenGL: /usr/lib64/libOpenGL.so
+-- Found WrapOpenGL: TRUE
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+-- Keyboard layouts will be installed in: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/kb-layouts
+-- Color schemes will be installed in: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes
+-- Translations will be installed in: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations
+-- Looking for updwtmpx
+-- Looking for updwtmpx - found
+-- Performing Test COMPILER_HAS_HIDDEN_VISIBILITY
+-- Performing Test COMPILER_HAS_HIDDEN_VISIBILITY - Success
+-- Performing Test COMPILER_HAS_HIDDEN_INLINE_VISIBILITY
+-- Performing Test COMPILER_HAS_HIDDEN_INLINE_VISIBILITY - Success
+-- Performing Test COMPILER_HAS_DEPRECATED_ATTR
+-- Performing Test COMPILER_HAS_DEPRECATED_ATTR - Success
+-- Configuring done (1.2s)
+-- Generating done (0.0s)
+-- Build files have been written to: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build
+[14/20] cd /project/build/cp311-cp311-linux_x86_64/qtermwidget-build && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake --build /project/build/cp311-cp311-linux_x86_64/qtermwidget-build && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E touch /project/build/cp311-cp311-linux_x86_64/qtermwidget_external-prefix/src/qtermwidget_external-stamp/qtermwidget_external-build
+[1/93] Generating lib/moc_Emulation.cpp
+[2/93] Generating lib/moc_Filter.cpp
+[3/93] Generating lib/moc_HistorySearch.cpp
+[4/93] Generating lib/moc_kprocess.cpp
+[5/93] Generating lib/moc_kptydevice.cpp
+[6/93] Generating lib/moc_kptyprocess.cpp
+[7/93] Generating lib/moc_Pty.cpp
+[8/93] Generating lib/moc_ScreenWindow.cpp
+[9/93] Generating lib/moc_SearchBar.cpp
+[10/93] Generating lib/moc_Session.cpp
+[11/93] Generating lib/moc_qtermwidget.cpp
+[12/93] Generating lib/moc_TerminalDisplay.cpp
+[13/93] Generating lib/moc_Vt102Emulation.cpp
+[14/93] Generating qtermwidget_ar.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_ar.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[15/93] Generating qtermwidget_arn.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_arn.qm'...
+    Generated 0 translation(s) (0 finished and 0 unfinished)
+    Ignored 28 untranslated source text(s)
+[16/93] Generating ui_SearchBar.h
+[17/93] Generating qtermwidget_ast.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_ast.qm'...
+    Generated 0 translation(s) (0 finished and 0 unfinished)
+    Ignored 28 untranslated source text(s)
+[18/93] Generating qtermwidget_ca.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_ca.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[19/93] Generating qtermwidget_bg.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_bg.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[20/93] Generating qtermwidget_cs.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_cs.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[21/93] Generating qtermwidget_cy.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_cy.qm'...
+    Generated 21 translation(s) (21 finished and 0 unfinished)
+    Ignored 7 untranslated source text(s)
+[22/93] Generating qtermwidget_da.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_da.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[23/93] Generating qtermwidget_de.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_de.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[24/93] Generating qtermwidget_de_CH.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_de_CH.qm'...
+    Generated 27 translation(s) (27 finished and 0 unfinished)
+    Ignored 1 untranslated source text(s)
+[25/93] Generating qtermwidget_el.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_el.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[26/93] Generating qtermwidget_en_GB.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_en_GB.qm'...
+    Generated 12 translation(s) (12 finished and 0 unfinished)
+    Ignored 16 untranslated source text(s)
+[27/93] Generating qtermwidget_es.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_es.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[28/93] Generating qtermwidget_fi.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_fi.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[29/93] Generating qtermwidget_fr.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_fr.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[30/93] Generating qtermwidget_gl.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_gl.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[31/93] Generating qtermwidget_he.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_he.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[32/93] Generating qtermwidget_hr.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_hr.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[33/93] Generating qtermwidget_hu.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_hu.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[34/93] Generating qtermwidget_et.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_et.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[35/93] Generating qtermwidget_ja.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_ja.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[36/93] Generating qtermwidget_ka.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_ka.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[37/93] Generating qtermwidget_kab.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_kab.qm'...
+    Generated 26 translation(s) (26 finished and 0 unfinished)
+    Ignored 2 untranslated source text(s)
+[38/93] Generating qtermwidget_kk.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_kk.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[39/93] Generating qtermwidget_it.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_it.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[40/93] Generating qtermwidget_ko.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_ko.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[41/93] Generating qtermwidget_lg.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_lg.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[42/93] Generating qtermwidget_lt.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_lt.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[43/93] Generating qtermwidget_nl.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_nl.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[44/93] Generating qtermwidget_nb_NO.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_nb_NO.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[45/93] Generating qtermwidget_oc.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_oc.qm'...
+    Generated 11 translation(s) (11 finished and 0 unfinished)
+    Ignored 17 untranslated source text(s)
+[46/93] Generating qtermwidget_sk.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_sk.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[47/93] Generating qtermwidget_pt.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_pt.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[48/93] Generating qtermwidget_pl.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_pl.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[49/93] Generating qtermwidget_pt_BR.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_pt_BR.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[50/93] Generating qtermwidget_tr.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_tr.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[51/93] Generating qtermwidget_uk.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_uk.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[52/93] Generating qtermwidget_zh_CN.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_zh_CN.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[53/93] Generating qtermwidget_si.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_si.qm'...
+    Generated 0 translation(s) (0 finished and 0 unfinished)
+    Ignored 28 untranslated source text(s)
+[54/93] Generating qtermwidget_ru.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_ru.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[55/93] Generating qtermwidget_zh_TW.qm
+Updating '/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/qtermwidget_zh_TW.qm'...
+    Generated 28 translation(s) (28 finished and 0 unfinished)
+[56/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/ShellCommand.cpp.o
+[57/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/konsole_wcwidth.cpp.o
+[58/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/moc_kprocess.cpp.o
+[59/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/moc_kptydevice.cpp.o
+[60/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/TerminalCharacterDecoder.cpp.o
+[61/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/kpty.cpp.o
+[62/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/kptyprocess.cpp.o
+[63/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/kptydevice.cpp.o
+[64/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/moc_Filter.cpp.o
+[65/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/tools.cpp.o
+[66/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/Pty.cpp.o
+[67/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/ScreenWindow.cpp.o
+[68/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/moc_kptyprocess.cpp.o
+[69/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/moc_HistorySearch.cpp.o
+[70/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/moc_Pty.cpp.o
+[71/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/moc_Emulation.cpp.o
+[72/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/Screen.cpp.o
+[73/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/kprocess.cpp.o
+[74/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/moc_ScreenWindow.cpp.o
+[75/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/qtermwidget.cpp.o
+[76/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/Vt102Emulation.cpp.o
+[77/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/BlockArray.cpp.o
+[78/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/History.cpp.o
+[79/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/KeyboardTranslator.cpp.o
+[80/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/ColorScheme.cpp.o
+[81/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/moc_qtermwidget.cpp.o
+[82/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/moc_Session.cpp.o
+[83/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/HistorySearch.cpp.o
+[84/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/TerminalDisplay.cpp.o
+[85/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/SearchBar.cpp.o
+[86/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/Filter.cpp.o
+[87/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/Session.cpp.o
+[88/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/moc_SearchBar.cpp.o
+[89/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/Emulation.cpp.o
+[90/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/moc_TerminalDisplay.cpp.o
+[91/93] Building CXX object CMakeFiles/qtermwidget6.dir/lib/moc_Vt102Emulation.cpp.o
+[92/93] Linking CXX shared library libqtermwidget6.so.2.3.0
+[93/93] Creating library symlink libqtermwidget6.so.2 libqtermwidget6.so
+[15/20] cd /project/build/cp311-cp311-linux_x86_64/qtermwidget-build && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake --install /project/build/cp311-cp311-linux_x86_64/qtermwidget-build && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E touch /project/build/cp311-cp311-linux_x86_64/qtermwidget_external-prefix/src/qtermwidget_external-stamp/qtermwidget_external-install
+-- Install configuration: "Release"
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_ar.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_arn.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_ast.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_bg.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_ca.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_cs.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_cy.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_da.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_de.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_de_CH.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_el.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_en_GB.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_es.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_et.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_fi.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_fr.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_gl.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_he.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_hr.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_hu.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_it.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_ja.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_ka.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_kab.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_kk.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_ko.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_lg.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_lt.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_nb_NO.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_nl.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_oc.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_pl.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_pt.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_pt_BR.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_ru.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_si.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_sk.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_tr.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_uk.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_zh_CN.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/translations/qtermwidget_zh_TW.qm
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/lib64/cmake/qtermwidget6/qtermwidget6-config-version.cmake
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/lib64/cmake/qtermwidget6/qtermwidget6-targets.cmake
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/lib64/cmake/qtermwidget6/qtermwidget6-targets-release.cmake
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/include/qtermwidget6/qtermwidget.h
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/include/qtermwidget6/Emulation.h
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/include/qtermwidget6/KeyboardTranslator.h
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/include/qtermwidget6/Filter.h
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/include/qtermwidget6/qtermwidget_interface.h
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/include/qtermwidget6/qtermwidget_export.h
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/include/qtermwidget6/qtermwidget_version.h
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/kb-layouts
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/kb-layouts/default.keytab
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/kb-layouts/historic
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/kb-layouts/historic/vt100.keytab
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/kb-layouts/historic/x11r5.keytab
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/kb-layouts/linux.keytab
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/kb-layouts/macbook.keytab
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/kb-layouts/solaris.keytab
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/kb-layouts/vt420pc.keytab
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/BlackOnLightYellow.colorscheme
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/BlackOnRandomLight.colorscheme
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/BlackOnWhite.colorscheme
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/BreezeModified.colorscheme
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/DarkPastels.colorscheme
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/Falcon.colorscheme
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/GreenOnBlack.colorscheme
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/Linux.colorscheme
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/Solarized.colorscheme
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/SolarizedLight.colorscheme
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/Tango.colorscheme
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/Ubuntu.colorscheme
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/WhiteOnBlack.colorscheme
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/historic
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/historic/BlackOnLightColor.schema
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/historic/DarkPicture.schema
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/historic/GreenOnBlack.schema
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/historic/GreenTint.schema
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/historic/GreenTint_MC.schema
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/historic/LightPicture.schema
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/historic/Linux.schema
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/historic/Transparent.schema
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/historic/Transparent_MC.schema
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/historic/Transparent_darkbg.schema
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/historic/Transparent_lightbg.schema
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/historic/XTerm.schema
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/historic/syscolor.schema
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/share/qtermwidget6/color-schemes/historic/vim.schema
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/lib64/pkgconfig/qtermwidget6.pc
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/lib64/cmake/qtermwidget6/qtermwidget6-config.cmake
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/lib64/libqtermwidget6.so.2.3.0
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/lib64/libqtermwidget6.so.2
+-- Set non-toolchain portion of runtime path of "/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/lib64/libqtermwidget6.so.2.3.0" to "$ORIGIN"
+-- Installing: /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/lib64/libqtermwidget6.so
+[16/20] cd /project/build/cp311-cp311-linux_x86_64 && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E make_directory /project/build/cp311-cp311-linux_x86_64/CMakeFiles && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E touch /project/build/cp311-cp311-linux_x86_64/CMakeFiles/qtermwidget_external-complete && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E touch /project/build/cp311-cp311-linux_x86_64/qtermwidget_external-prefix/src/qtermwidget_external-stamp/qtermwidget_external-done
+[17/20] cd /project/src && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E make_directory /project/build_bindings && /tmp/build-env-cs0am078/lib/python3.11/site-packages/shiboken6_generator/shiboken6 --generator-set=shiboken --enable-parent-ctor-heuristic --enable-pyside-extensions --enable-return-value-heuristic --use-isnull-as-nb_nonzero --avoid-protected-hack --output-directory=/project/build_bindings --include-paths=/usr/lib64/llvm20/include:/include:/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/include:/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/include/qtermwidget6:/host/tmp/Qt/6.9.0/gcc_64/include:/host/tmp/Qt/6.9.0/gcc_64/include/QtCore:/host/tmp/Qt/6.9.0/gcc_64/include/QtGui:/host/tmp/Qt/6.9.0/gcc_64/include/QtWidgets --typesystem-paths=/tmp/build-env-cs0am078/lib/python3.11/site-packages/PySide6/typesystems /project/src/qtermwidget_bindings.h /project/src/typesystem_qtermwidget.xml
+FAILED: [code=1] /project/build_bindings/qtermwidget/qtermwidget_module_wrapper.cpp /project/build_bindings/qtermwidget/qtermwidget_wrapper.cpp 
+cd /project/src && /opt/_internal/pipx/venvs/cmake/lib/python3.12/site-packages/cmake/data/bin/cmake -E make_directory /project/build_bindings && /tmp/build-env-cs0am078/lib/python3.11/site-packages/shiboken6_generator/shiboken6 --generator-set=shiboken --enable-parent-ctor-heuristic --enable-pyside-extensions --enable-return-value-heuristic --use-isnull-as-nb_nonzero --avoid-protected-hack --output-directory=/project/build_bindings --include-paths=/usr/lib64/llvm20/include:/include:/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/include:/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/include/qtermwidget6:/host/tmp/Qt/6.9.0/gcc_64/include:/host/tmp/Qt/6.9.0/gcc_64/include/QtCore:/host/tmp/Qt/6.9.0/gcc_64/include/QtGui:/host/tmp/Qt/6.9.0/gcc_64/include/QtWidgets --typesystem-paths=/tmp/build-env-cs0am078/lib/python3.11/site-packages/PySide6/typesystems /project/src/qtermwidget_bindings.h /project/src/typesystem_qtermwidget.xml
+qt.shiboken: (qtermwidget) findClangBuiltInIncludesDir: Falling back from /usr/lib64/llvm20/lib64 to /usr/lib64/llvm20/lib.
+qt.shiboken: (qtermwidget) findClangBuiltInIncludesDir: No subdirectories found in /usr/lib64/llvm20/lib/clang.
+qt.shiboken: (qtermwidget) CLANG v0.64, builtins includes directory: /usr/lib64/llvm20/include
+/opt/rh/gcc-toolset-14/root/usr/lib/gcc/x86_64-redhat-linux/14/../../../../include/c++/14/cstddef:50:10: fatal error: 'stddef.h' file not found
+(qtermwidget) Errors in /tmp/qtermwidget_bindings_zafFOZ.hpp:
+/opt/rh/gcc-toolset-14/root/usr/lib/gcc/x86_64-redhat-linux/14/../../../../include/c++/14/cstddef:50:10: fatal: 'stddef.h' file not found
+   /tmp/qtermwidget_bindings_zafFOZ.hpp:1:10: note: in file included from /tmp/qtermwidget_bindings_zafFOZ.hpp:1:
+   /project/src/qtermwidget_bindings.h:5:10: note: in file included from /project/src/qtermwidget_bindings.h:5:
+   /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/include/qtermwidget6/qtermwidget.h:23:10: note: in file included from /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/include/qtermwidget6/qtermwidget.h:23:
+   /host/tmp/Qt/6.9.0/gcc_64/include/QtCore/QTranslator:1:10: note: in file included from /host/tmp/Qt/6.9.0/gcc_64/include/QtCore/QTranslator:1:
+   /host/tmp/Qt/6.9.0/gcc_64/include/QtCore/qtranslator.h:7:10: note: in file included from /host/tmp/Qt/6.9.0/gcc_64/include/QtCore/qtranslator.h:7:
+   /host/tmp/Qt/6.9.0/gcc_64/include/QtCore/qobject.h:10:10: note: in file included from /host/tmp/Qt/6.9.0/gcc_64/include/QtCore/qobject.h:10:
+   /host/tmp/Qt/6.9.0/gcc_64/include/QtCore/qobjectdefs.h:12:10: note: in file included from /host/tmp/Qt/6.9.0/gcc_64/include/QtCore/qobjectdefs.h:12:
+   /host/tmp/Qt/6.9.0/gcc_64/include/QtCore/qnamespace.h:12:10: note: in file included from /host/tmp/Qt/6.9.0/gcc_64/include/QtCore/qnamespace.h:12:
+   /host/tmp/Qt/6.9.0/gcc_64/include/QtCore/qglobal.h:14:12: note: in file included from /host/tmp/Qt/6.9.0/gcc_64/include/QtCore/qglobal.h:14:
+
+
+(qtermwidget) Clang: 1 diagnostic messages:
+  /opt/rh/gcc-toolset-14/root/usr/lib/gcc/x86_64-redhat-linux/14/../../../../include/c++/14/cstddef:50:10: fatal: 'stddef.h' file not found
+   /tmp/qtermwidget_bindings_zafFOZ.hpp:1:10: note: in file included from /tmp/qtermwidget_bindings_zafFOZ.hpp:1:
+   /project/src/qtermwidget_bindings.h:5:10: note: in file included from /project/src/qtermwidget_bindings.h:5:
+   /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/include/qtermwidget6/qtermwidget.h:23:10: note: in file included from /project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/include/qtermwidget6/qtermwidget.h:23:
+   /host/tmp/Qt/6.9.0/gcc_64/include/QtCore/QTranslator:1:10: note: in file included from /host/tmp/Qt/6.9.0/gcc_64/include/QtCore/QTranslator:1:
+   /host/tmp/Qt/6.9.0/gcc_64/include/QtCore/qtranslator.h:7:10: note: in file included from /host/tmp/Qt/6.9.0/gcc_64/include/QtCore/qtranslator.h:7:
+   /host/tmp/Qt/6.9.0/gcc_64/include/QtCore/qobject.h:10:10: note: in file included from /host/tmp/Qt/6.9.0/gcc_64/include/QtCore/qobject.h:10:
+   /host/tmp/Qt/6.9.0/gcc_64/include/QtCore/qobjectdefs.h:12:10: note: in file included from /host/tmp/Qt/6.9.0/gcc_64/include/QtCore/qobjectdefs.h:12:
+   /host/tmp/Qt/6.9.0/gcc_64/include/QtCore/qnamespace.h:12:10: note: in file included from /host/tmp/Qt/6.9.0/gcc_64/include/QtCore/qnamespace.h:12:
+   /host/tmp/Qt/6.9.0/gcc_64/include/QtCore/qglobal.h:14:12: note: in file included from /host/tmp/Qt/6.9.0/gcc_64/include/QtCore/qglobal.h:14:
+
+
+Keeping temporary file: /tmp/qtermwidget_bindings_zafFOZ.hpp
+shiboken: Error running ApiExtractor.
+Command line:
+    "--generator-set=shiboken"
+    "--enable-parent-ctor-heuristic"
+    "--enable-pyside-extensions"
+    "--enable-return-value-heuristic"
+    "--use-isnull-as-nb_nonzero"
+    "--avoid-protected-hack"
+    "--output-directory=/project/build_bindings"
+    "--include-paths=/usr/lib64/llvm20/include:/include:/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/include:/project/build/cp311-cp311-linux_x86_64/qtermwidget-build/install/include/qtermwidget6:/host/tmp/Qt/6.9.0/gcc_64/include:/host/tmp/Qt/6.9.0/gcc_64/include/QtCore:/host/tmp/Qt/6.9.0/gcc_64/include/QtGui:/host/tmp/Qt/6.9.0/gcc_64/include/QtWidgets"
+    "--typesystem-paths=/tmp/build-env-cs0am078/lib/python3.11/site-packages/PySide6/typesystems"
+    "/project/src/qtermwidget_bindings.h"
+    "/project/src/typesystem_qtermwidget.xml"
+ninja: build stopped: subcommand failed.
+
+
+
+                                                                      ✕ 29.24s

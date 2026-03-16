@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<typesystem package="qtermwidget">
+<typesystem package="pyside6_qtermwidget">
     <load-typesystem name="typesystem_widgets.xml" generate="no"/>
     
     <object-type name="QTermWidget"/>
