@@ -4,6 +4,9 @@ Packages [QTermWidget](https://github.com/lxqt/qtermwidget), a terminal emulator
 python bindings. This repository contains mainly CMake scripts and CI workflows to achieve this, and just pulls the
 upstream QTermWidget source for building.
 
+New code in this repository is licensed under GPLv3 while the external dependencies retain their BSD (lxqt build tools)
+and GPLv2+ (qtermwidget) licenses respectively; see those projects themselves for details.
+
 Installations from wheels are recommended - installation from sdist may not work properly without a specific build
 environment which is for now not documented here, but relies at least on a Qt source installation, llvm/clang,
 mesa/libGL, and others - see `.github/workflows/ci.yml` and `pyproject.toml.jinja` for details.
