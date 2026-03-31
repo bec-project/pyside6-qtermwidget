@@ -1,7 +1,9 @@
 build/
+dist/
 CMakeCache.txt
 CMakeFiles/
 Qt/
 aqtinstall.log
 pyproject.toml
 wheelhouse/
+log.txt

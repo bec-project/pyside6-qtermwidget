@@ -11,14 +11,13 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "pyside6-qtermwidget"
-version = "0.0.{{ QT_VERSION }}"
+version = "0.2.{{ QT_VERSION }}"
 description = "Python bindings for QTermWidget using Shiboken6"
 readme = "readme.md"
 requires-python = ">=3.11"
-license = { text = "GPL-2.0-or-later" }
+license = { text = "GPL-3.0" }
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: GPLv2 or later (GPLv2+)",
     "Operating System :: OS Independent",
 ]
 dependencies = ["PySide6=={{ QT_VERSION }}", "PySide6_Essentials=={{ QT_VERSION }}", "shiboken6=={{ QT_VERSION }}"]
@@ -27,6 +26,7 @@ dependencies = ["PySide6=={{ QT_VERSION }}", "PySide6_Essentials=={{ QT_VERSION 
 build-dir = "build/{wheel_tag}"
 build.verbose = true
 wheel.packages = ["pyside6_qtermwidget"]
+sdist.exclude = ["external"]
 
 [tool.cibuildwheel]
 environment-pass = ["CIBUILDWHEEL_WORKSPACE"]
@@ -47,7 +47,7 @@ linux.before-build = [
 macos.before-build = [
     "brew install cmake llvm"
 ]
-linux.repair-wheel-command = ""
+linux.repair-wheel-command = "auditwheel repair --exclude \"*\" -w {dest_dir} {wheel}"
 macos.repair-wheel-command = ""
 before-test = ["pip install pytest"]
 test-command = [
