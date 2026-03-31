@@ -3,4 +3,5 @@
 	url = https://github.com/lxqt/lxqt-build-tools.git
 [submodule "external/qtermwidget"]
 	path = external/qtermwidget
-	url = https://github.com/lxqt/qtermwidget.git
+	url = https://github.com/d-perl/qtermwidget.git
+	branch = feat/custom_keyboard_layouts
