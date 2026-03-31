@@ -223,7 +223,7 @@ install(DIRECTORY
     DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/pyside6_qtermwidget/color-schemes
 )
 install(DIRECTORY
-    ${EXT_QTERMWIDGET_DIR}/lib/color-schemes/
+    ${EXT_QTERMWIDGET_DIR}/lib/kb-layouts/
     DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/pyside6_qtermwidget/kb-layouts
 )
 add_custom_command(TARGET pyside6_qtermwidget POST_BUILD
