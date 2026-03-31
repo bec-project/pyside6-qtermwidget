@@ -218,15 +218,21 @@ install(FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/__init__.py
     DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/pyside6_qtermwidget/
 )
+install(DIRECTORY
+    ${EXT_QTERMWIDGET_DIR}/lib/color-schemes/
+    DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/pyside6_qtermwidget/color-schemes
+)
+install(DIRECTORY
+    ${EXT_QTERMWIDGET_DIR}/lib/color-schemes/
+    DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/pyside6_qtermwidget/kb-layouts
+)
 add_custom_command(TARGET pyside6_qtermwidget POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
     $<IF:$<PLATFORM_ID:Darwin>,${QTERMWIDGET_DIR}/lib/libqtermwidget6.dylib,${QTERMWIDGET_DIR}/lib64/libqtermwidget6.so.2>
     ${CMAKE_CURRENT_SOURCE_DIR}/pyside6_qtermwidget/lib/$<IF:$<PLATFORM_ID:Darwin>,libqtermwidget6.2.dylib,libqtermwidget6.so.2>
     COMMENT "Copying libqtermwidget6 library to Python package directory"
 )
-install(CODE
-    "execute_process(COMMAND shiboken6-genpyi ${CMAKE_CURRENT_SOURCE_DIR}/pyside6_qtermwidget/pyside6_qtermwidget.so)"
-)
+
 
 # add_custom_command(TARGET pyside6_qtermwidget POST_BUILD
 #     COMMAND sleep 10000

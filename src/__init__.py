@@ -1,16 +1,13 @@
+from pathlib import Path
+
 import PySide6
 import shiboken6
 
-from .pyside6_qtermwidget import QTermWidget
+_INSTALL_LOCATION = Path(__file__).parent
 
-__all__ = ["QTermWidget"]
+from .pyside6_qtermwidget import QTermWidget as _QTermWidget
 
-if __name__ == "__main__":
-    import sys
 
-    from PySide6.QtWidgets import QApplication
-
-    app = QApplication(sys.argv)
-    widget = QTermWidget()
-    widget.show()
-    sys.exit(app.exec())
+class QTermWidget(_QTermWidget):
+    def __init__(self, *args, **kwargs):
+        self.addCustomColorSchemeDir(str(_INSTALL_LOCATION / "color_schemes"))
