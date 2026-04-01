@@ -9,11 +9,14 @@ set(QTERMWIDGET_DIR "${QTERMWIDGET_BUILD_DIR}/install")
 
 # Determine library extension based on platform
 if(APPLE)
-    set(QTERMWIDGET_LIB "${QTERMWIDGET_DIR}/lib/libqtermwidget6.dylib")
+    set(QTERMWIDGET_LIB_DIR "${QTERMWIDGET_DIR}/lib")
+    set(QTERMWIDGET_LIB "${QTERMWIDGET_LIB_DIR}/libqtermwidget6.dylib")
     set(LIBQTW_INSTALL_RPATH "@rpath")
 else()
+    
+    set(QTERMWIDGET_LIB_DIR "${QTERMWIDGET_DIR}/lib64")
+    set(QTERMWIDGET_LIB "${QTERMWIDGET_LIB_DIR}/libqtermwidget6.so")
     set(LIBQTW_INSTALL_RPATH "\$ORIGIN/lib")
-    set(QTERMWIDGET_LIB "${QTERMWIDGET_DIR}/lib64/libqtermwidget6.so")
 endif()
 
 
