@@ -211,13 +211,17 @@ target_link_libraries(pyside6_qtermwidget
     ${SHIBOKEN_LIBS}
 )
 
+add_custom_command(TARGET pyside6_qtermwidget POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    $<IF:$<PLATFORM_ID:Darwin>,${QTERMWIDGET_DIR}/lib/libqtermwidget6.dylib,${QTERMWIDGET_DIR}/lib64/libqtermwidget6.so.2>
+    ${CMAKE_CURRENT_SOURCE_DIR}/pyside6_qtermwidget/lib/$<IF:$<PLATFORM_ID:Darwin>,libqtermwidget6.2.dylib,libqtermwidget6.so.2>
+    COMMENT "Copying libqtermwidget6 library to Python package directory"
+)
+
 install(TARGETS pyside6_qtermwidget
     DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/pyside6_qtermwidget/
 )
-install(FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/__init__.py
-    DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/pyside6_qtermwidget/
-)
+
 install(DIRECTORY
     ${EXT_QTERMWIDGET_DIR}/lib/color-schemes/
     DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/pyside6_qtermwidget/color-schemes
@@ -226,13 +230,16 @@ install(DIRECTORY
     ${EXT_QTERMWIDGET_DIR}/lib/kb-layouts/
     DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/pyside6_qtermwidget/kb-layouts
 )
-add_custom_command(TARGET pyside6_qtermwidget POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    $<IF:$<PLATFORM_ID:Darwin>,${QTERMWIDGET_DIR}/lib/libqtermwidget6.dylib,${QTERMWIDGET_DIR}/lib64/libqtermwidget6.so.2>
-    ${CMAKE_CURRENT_SOURCE_DIR}/pyside6_qtermwidget/lib/$<IF:$<PLATFORM_ID:Darwin>,libqtermwidget6.2.dylib,libqtermwidget6.so.2>
-    COMMENT "Copying libqtermwidget6 library to Python package directory"
-)
 
+install(CODE "
+    message(STATUS \"Generating pyi file\")
+    execute_process(COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/utils/modified_pyi_generator.py ${CMAKE_CURRENT_SOURCE_DIR}/pyside6_qtermwidget)
+")
+
+install(FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/__init__.py
+    DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/pyside6_qtermwidget/
+)
 
 # add_custom_command(TARGET pyside6_qtermwidget POST_BUILD
 #     COMMAND sleep 10000
