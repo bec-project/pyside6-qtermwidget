@@ -11,7 +11,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "pyside6-qtermwidget"
-version = "0.4.{{ QT_VERSION }}"
+version = "0.5.{{ QT_VERSION }}"
 description = "Python bindings for QTermWidget using Shiboken6"
 readme = "readme.md"
 requires-python = ">=3.11"
@@ -60,5 +60,4 @@ QT6_INSTALL_DIR = "/host$CIBUILDWHEEL_WORKSPACE/Qt/{{ QT_VERSION }}/gcc_64"
 CMAKE_PREFIX_PATH = "/host$CIBUILDWHEEL_WORKSPACE/Qt/{{ QT_VERSION }}/gcc_64/lib/cmake"
 LD_LIBRARY_PATH = "/host$CIBUILDWHEEL_WORKSPACE/Qt/{{ QT_VERSION }}/gcc_64/lib:$LD_LIBRARY_PATH"
 CC = "clang"
-CXX = "clang++" 
-
+CXX = "clang++"
