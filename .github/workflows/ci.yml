@@ -2,7 +2,6 @@ name: Build qtermwidget wheels (cibuildwheel)
 
 on: [push, pull_request]
 
-
 jobs:
   build:
     runs-on: ${{ matrix.os.runner }}
@@ -12,8 +11,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [{name: "linux", runner: "ubuntu-latest"}, {name: "macos", runner: "macos-latest"}]
-        qt_version: ["6.9.0"]
+        os:
+          [
+            { name: "linux", runner: "ubuntu-latest" },
+            { name: "macos", runner: "macos-latest" },
+          ]
+        qt_version: ["6.9.0", "6.10.3", "6.11.0"]
 
     steps:
       - name: Set up Python (host)
@@ -39,7 +42,7 @@ jobs:
           python -m pip install aqtinstall
           aqt install-qt linux desktop ${{ matrix.qt_version }} --outputdir ${{ github.workspace }}/Qt
           aqt install-qt mac desktop ${{ matrix.qt_version }} --outputdir ${{ github.workspace }}/Qt
-      
+
       - name: Save Qt lib cache
         if: steps.cache-qt-lib-restore.outputs.cache-hit != 'true'
         id: cache-qt-lib-save
@@ -77,8 +80,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-       qt_version: ["6.9.0"]
-
+        qt_version: ["6.9.0", "6.10.3", "6.11.0"]
     steps:
       - uses: actions/checkout@v4
 
@@ -97,14 +99,14 @@ jobs:
 
       - name: Move artifact wheels to dist
         run: |
-              ls artifacts
-              mkdir dist
-              shopt -s nullglob  # glob expands to nothing if no match
-              for f in artifacts/*.zip; do
-                echo "Extracting $f..."
-                unzip -q "$f" -d dist
-              done
-              mv artifacts/*.whl dist
+          ls artifacts
+          mkdir dist
+          shopt -s nullglob  # glob expands to nothing if no match
+          for f in artifacts/*.zip; do
+            echo "Extracting $f..."
+            unzip -q "$f" -d dist
+          done
+          mv artifacts/*.whl dist
 
       - name: Generate pyproject.toml
         run: |
@@ -115,7 +117,7 @@ jobs:
 
       - name: Build sdist
         run: python -m build --sdist
-      
+
       - name: debug
         run: ls dist
 
