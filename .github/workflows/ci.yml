@@ -1,6 +1,6 @@
 name: Build qtermwidget wheels (cibuildwheel)
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
   build:
@@ -16,7 +16,7 @@ jobs:
             { name: "linux", runner: "ubuntu-latest" },
             { name: "macos", runner: "macos-latest" },
           ]
-        qt_version: [ "6.9.0", "6.10.3", "6.11.0", "6.11.1" ]
+        qt_version: [ "6.10.3", "6.11.0", "6.11.1" ]
 
     steps:
       - name: Set up Python (host)
@@ -80,7 +80,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        qt_version: ["6.9.0", "6.10.3", "6.11.0"]
+        qt_version: [ "6.9.0", "6.10.3", "6.11.0" ]
     steps:
       - uses: actions/checkout@v4
 
