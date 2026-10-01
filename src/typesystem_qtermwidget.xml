@@ -2,5 +2,62 @@
 <typesystem package="pyside6_qtermwidget">
     <load-typesystem name="typesystem_widgets.xml" generate="no"/>
     
-    <object-type name="QTermWidget"/>
+    <object-type name="QTermWidget">
+        <include file-name="qtermwidget.h" location="local"/>
+
+        <!-- Hide the raw (const char*, int) signal from Python to avoid runtime TypeErrors -->
+        <modify-function signature="sendData(const char*, int)" remove="all"/>
+
+        <!-- Add helper connection method to Python binding -->
+        <add-function signature="connectSendData(PyObject*)" return-type="void">
+            <inject-code class="target" position="beginning">
+                <![CDATA[
+                #include <memory>
+
+                PyObject* callable = %1;
+
+                if (!PyCallable_Check(callable)) {
+                    PyErr_SetString(PyExc_TypeError, "Parameter must be a callable");
+                    return nullptr;
+                }
+
+                // Helper struct to safely manage PyObject lifetime when the connection/widget is destroyed
+                struct PythonCallableHolder {
+                    PyObject* cb;
+                    PythonCallableHolder(PyObject* p) : cb(p) {
+                        PyGILState_STATE gstate = PyGILState_Ensure();
+                        Py_INCREF(cb);
+                        PyGILState_Release(gstate);
+                    }
+                    ~PythonCallableHolder() {
+                        PyGILState_STATE gstate = PyGILState_Ensure();
+                        Py_DECREF(cb);
+                        PyGILState_Release(gstate);
+                    }
+                };
+
+                auto holder = std::make_shared<PythonCallableHolder>(callable);
+
+                // Connect C++ signal to a lambda that invokes the Python callable
+                QObject::connect(%CPPSELF, &QTermWidget::sendData, [holder](const char* data, int len) {
+                    PyGILState_STATE gstate = PyGILState_Ensure();
+
+                    PyObject* pyBytes = PyBytes_FromStringAndSize(data, len);
+                    if (pyBytes) {
+                        PyObject* result = PyObject_CallOneArg(holder->cb, pyBytes);
+                        if (!result) {
+                            PyErr_Print(); // Safely print traceback if Python slot raises an exception
+                        }
+                        Py_XDECREF(result);
+                        Py_DECREF(pyBytes);
+                    }
+
+                    PyGILState_Release(gstate);
+                });
+
+                Py_RETURN_NONE;
+                ]]>
+            </inject-code>
+        </add-function>
+    </object-type>
 </typesystem>
